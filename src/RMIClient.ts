@@ -8,11 +8,11 @@ export class RMIClient {
 	 * TODO: Doesn't account for newline and comment shenanigans
 	 * @param func
 	 */
-	static getArgs(func: string) {
+	private getArgs(func: string) {
 		return func.replace(' ', '').split('(')[1].split(')')[0].split(',');
 	}
 
-	static addRemoteMethods<T extends RemoteMethods>(remoteMethods: T, connection?: WebSocket): T {
+	addRemoteMethods<T extends RemoteMethods>(remoteMethods: T, connection?: WebSocket): T {
 		// TODO: Add options to configure websocket connection url
 		remoteMethods.connection = connection || new WebSocket('ws://localhost:3001/');
 
@@ -21,7 +21,7 @@ export class RMIClient {
 
 			// Unique function being iterated on
 			let uniqueFunction: Function = remoteMethods[value];
-			const args = RMIClient.getArgs(uniqueFunction.toString());
+			const args = this.getArgs(uniqueFunction.toString());
 
 
 			// Incredible amounts of jankery below, I'm sorry if there are bugs
