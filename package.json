@@ -1,0 +1,44 @@
+{
+  "name": "ws-rmi",
+  "version": "0.0.1",
+  "description": "RMI in Javascript through native WebSocket",
+  "main": "dist/index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bigbeno37/ws-rmi.git"
+  },
+  "keywords": [
+    "WebSocket",
+    "ws",
+    "RMI",
+    "remote",
+    "method",
+    "invocation",
+    "native",
+    "typescript"
+  ],
+  "author": "bigbeno37",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bigbeno37/ws-rmi/issues"
+  },
+  "homepage": "https://github.com/bigbeno37/ws-rmi#readme",
+  "devDependencies": {
+    "@types/jest": "^24.0.5",
+    "@types/ws": "^6.0.1",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.5",
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "ws": "^6.1.3"
+  }
+}
