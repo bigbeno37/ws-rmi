@@ -1,7 +1,12 @@
-import {RemoteMethods} from "./RemoteMethods";
 import WebSocket from 'ws';
+import {RemoteMethods} from "./index";
 
 export class RMIClient {
+	private readonly _connection: WebSocket;
+
+	constructor(connection?: WebSocket) {
+		this._connection = connection || new WebSocket('ws://localhost:3001/');
+	}
 
 	/**
 	 * Returns arguments from a function string in the format [arg1, arg2, arg3...]
@@ -12,9 +17,9 @@ export class RMIClient {
 		return func.replace(' ', '').split('(')[1].split(')')[0].split(',');
 	}
 
-	addRemoteMethods<T extends RemoteMethods>(remoteMethods: T, connection?: WebSocket): T {
+	addRemoteMethods<T extends RemoteMethods>(remoteMethods: T): T {
 		// TODO: Add options to configure websocket connection url
-		remoteMethods.connection = connection || new WebSocket('ws://localhost:3001/');
+		remoteMethods.connection = this._connection;
 
 		for (const value of Object.getOwnPropertyNames(Object.getPrototypeOf(remoteMethods))) {
 			if (value === 'constructor') continue;

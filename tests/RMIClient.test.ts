@@ -20,7 +20,7 @@ describe('RMIClient', () => {
 		connection.on = jest.fn((type: string, handler: (message: string) => void) => sendMessageToClient = handler);
 		connection.removeListener = jest.fn();
 
-		server = new RMIClient().addRemoteMethods(new ServerMethods(), connection);
+		server = new RMIClient(connection).addRemoteMethods(new ServerMethods());
 	});
 
 	it('correctly formats message to server when calling calculateSum', () => {
