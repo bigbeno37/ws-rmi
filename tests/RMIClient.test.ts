@@ -1,5 +1,4 @@
-import {RMIClient} from "../src";
-import {RemoteMethods} from "../src/RemoteMethods";
+import {RemoteMethods, RMIClient} from "../src";
 
 let server: ServerMethods;
 let connection: any;
