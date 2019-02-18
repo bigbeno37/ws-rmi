@@ -2,10 +2,10 @@ import WebSocket from 'ws';
 import {RemoteMethods} from "./index";
 
 export class RMIClient {
-	private readonly _connection: WebSocket;
+	public connection: WebSocket;
 
 	constructor(connection?: WebSocket) {
-		this._connection = connection || new WebSocket('ws://localhost:3001/');
+		this.connection = connection || new WebSocket('ws://localhost:3001/');
 	}
 
 	/**
@@ -17,9 +17,9 @@ export class RMIClient {
 		return func.replace(' ', '').split('(')[1].split(')')[0].split(',');
 	}
 
-	addRemoteMethods<T extends RemoteMethods>(remoteMethods: T): T {
+	addRemoteMethods<T extends RemoteMethods>(remoteMethods: T): T&RMIClient {
 		// TODO: Add options to configure websocket connection url
-		remoteMethods.connection = this._connection;
+		remoteMethods.connection = this.connection;
 
 		for (const value of Object.getOwnPropertyNames(Object.getPrototypeOf(remoteMethods))) {
 			if (value === 'constructor') continue;
@@ -35,8 +35,10 @@ export class RMIClient {
 	
 				return new Promise(resolve => {				
 					const listener = message => {
-						if (message.split(' ')[0] === '${uniqueFunction.name}') {
-							this.connection.removeListener(listener);
+						console.log(\`Server said \$\{message\}\`);
+					
+						if (message.split(' ')[0] === '${uniqueFunction.name}') {						
+							this.connection.removeListener('message', listener);
 	
 							resolve( JSON.parse( message.split(' ').splice(1).join(' ') ) );
 						}
@@ -48,7 +50,16 @@ export class RMIClient {
 			remoteMethods[value] = Function(...args, newFunctionBody);
 		}
 
-		return remoteMethods;
+		for (const value of Object.getOwnPropertyNames(Object.getPrototypeOf(this))) {
+			if (value === 'constructor') continue;
+
+			remoteMethods[value] = (this as any)[value];
+		}
+
+		return remoteMethods as T&RMIClient;
 	}
 
+	async isConnected() {
+		return new Promise(resolve => this.connection.on('open', () => resolve()));
+	}
 }
