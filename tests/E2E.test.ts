@@ -1,5 +1,6 @@
 import {RMIServer} from "../src/RMIServer";
 import {MethodHandlers, RMIClient} from "../src";
+import WebSocket from 'ws';
 
 class ServerHandlers implements MethodHandlers {
 	calculateSum(num1: number, num2: number): number {
@@ -20,12 +21,12 @@ let remote: ServerHandlers&RMIClient;
 
 describe('E2E', () => {
 	beforeAll(() => {
+		(global as any).WebSocket = WebSocket;
 		server = new RMIServer(new ServerHandlers());
 	});
 
 	beforeEach(async () => {
-		remote = new RMIClient().addRemoteMethods(new ServerHandlers());
-		await remote.isConnected();
+		remote = await new RMIClient().addRemoteMethods(new ServerHandlers());
 	});
 
 	it('returns the correct sum of 1 and 2', async () => {

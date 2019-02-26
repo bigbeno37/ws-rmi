@@ -1,11 +1,17 @@
-import WebSocket from 'ws';
 import {RemoteMethods} from "./index";
 
 export class RMIClient {
 	public connection: WebSocket;
 
+	private readonly _isConnected: Promise<void>;
+
 	constructor(connection?: WebSocket) {
 		this.connection = connection || new WebSocket('ws://localhost:3001/');
+
+		// If this connection isn't OPEN, create a new promise that resolves when it becomes open
+		if (this.connection.readyState !== 1) {
+			this._isConnected = new Promise(resolve => this.connection.addEventListener("open", () => resolve()));
+		}
 	}
 
 	/**
@@ -17,7 +23,12 @@ export class RMIClient {
 		return func.replace(' ', '').split('(')[1].split(')')[0].split(',');
 	}
 
-	addRemoteMethods<T extends RemoteMethods>(remoteMethods: T): T&RMIClient {
+	async addRemoteMethods<T extends RemoteMethods>(remoteMethods: T): Promise<T&RMIClient>{
+		// If this isn't an open connection, wait for it to be one
+		if (this._isConnected) {
+			await this._isConnected;
+		}
+
 		// TODO: Add options to configure websocket connection url
 		remoteMethods.connection = this.connection;
 
@@ -28,23 +39,22 @@ export class RMIClient {
 			let uniqueFunction: Function = remoteMethods[value];
 			const args = this.getArgs(uniqueFunction.toString());
 
-
 			// Incredible amounts of jankery below, I'm sorry if there are bugs
 			const newFunctionBody =
 				`this.connection.send(\`${uniqueFunction.name} \$\{JSON.stringify([${args}])\}\`);
 	
 				return new Promise(resolve => {				
-					const listener = message => {
-						console.log(\`Server said \$\{message\}\`);
+					const listener = ({data}) => {
+						console.log(\`Server said \$\{data\}\`);
 					
-						if (message.split(' ')[0] === '${uniqueFunction.name}') {						
-							this.connection.removeListener('message', listener);
+						if (data.split(' ')[0] === '${uniqueFunction.name}') {						
+							this.connection.removeEventListener('message', listener);
 	
-							resolve( JSON.parse( message.split(' ').splice(1).join(' ') ) );
+							resolve( JSON.parse( data.split(' ').splice(1).join(' ') ) );
 						}
 					};
 						
-					this.connection.on('message', listener);
+					this.connection.addEventListener('message', listener);
 				});`;
 
 			remoteMethods[value] = Function(...args, newFunctionBody);
@@ -57,9 +67,5 @@ export class RMIClient {
 		}
 
 		return remoteMethods as T&RMIClient;
-	}
-
-	async isConnected() {
-		return new Promise(resolve => this.connection.on('open', () => resolve()));
 	}
 }
