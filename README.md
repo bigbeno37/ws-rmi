@@ -15,6 +15,7 @@ export class ServerMethods extends MethodHandlers {
 ```
 
 On the server, simply pass in an instance of this class into the constructor of RMIServer:
+**(NOTE: RMIServer requires an es6+ environment to work!)**
 
 ```typescript
 import {RMIServer} from 'ws-rmi';
@@ -22,7 +23,9 @@ import {RMIServer} from 'ws-rmi';
 const server = new RMIServer(new ServerMethods());
 ```
 
-This will automatically spin up an express server on port 3001 listening for WebSocket connections. To allow a client to use the methods specified in ServerMethods, either an instance of ServerMethods or an interface-like class must be provided. An example of an interface-like class is as follows:
+This will automatically spin up an express server on port 3001 listening for WebSocket connections. If using Typescript, a quick and easy way to launch a `server.ts` file is to use `ts-node` with the command `ts-node -O '{"module": "commonjs", "target": "ES6"}' server.ts`. Note that the -O {...} argument can be removed if a tsconfig file is set up with target ES6 or above and module set to commonjs.
+
+To allow a client to use the methods specified in ServerMethods, either an instance of ServerMethods or an interface-like class must be provided. An example of an interface-like class is as follows:
 
 ```typescript
 import {RemoteMethods} from 'ws-rmi';
