@@ -1,8 +1,10 @@
 import {MethodHandlers, RemoteMethods} from "./src";
 import {Application} from "express-ws";
+import WsWebSocket from 'ws';
 
 export class RMIClient {
 	public connection: WebSocket;
+	public handlers: Map<string, Function>;
 
 	constructor(connection?: WebSocket);
 
@@ -12,6 +14,12 @@ export class RMIClient {
 	 * @param remoteMethods
 	 */
 	addRemoteMethods<T extends RemoteMethods>(remoteMethods: T): Promise<T&RMIClient>;
+
+	/**
+	 * Prepares for two way RMI via the remote app calling new RMIClient(...).addRemoteMethods(...).(funcName)
+	 * @param methodHandlers
+	 */
+	addMethodHandlers(methodHandlers: MethodHandlers): RMIClient;
 }
 
 /**
@@ -20,14 +28,19 @@ export class RMIClient {
  */
 export class RMIServer {
 	public handlers: Map<string, Function>;
+	public onNewConnection: (connection: WsWebSocket) => void;
 
 	/**
-	 * Starts up an express server listening for websockets on localhost:3001 and
-	 * creates handlers for RMIClient requests
-	 * @param methodHandlers An instance of a MethodHandlers class
+	 * Starts up an express server listening for websockets on localhost:3001
 	 * @param server An Express application to use instead of starting a server. Used internally for testing
 	 */
-	constructor(methodHandlers: MethodHandlers, server?: Application);
+	constructor(server?: Application);
+
+	/**
+	 * Registers handlers with RMIServer so that clients can successfully call server methods
+	 * @param methodHandlers
+	 */
+	addMethodHandlers(methodHandlers: MethodHandlers): RMIServer;
 }
 
 export interface RemoteMethods {

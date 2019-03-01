@@ -1,52 +1,60 @@
 import express from 'express';
 import expressWs, {Application} from 'express-ws';
 import {MethodHandlers} from "./index";
+import WebSocket from 'ws';
 
 export class RMIServer {
 	private readonly _server: Application;
-	private _handlers: Map<string, Function>;
+	public handlers: Map<string, Function>;
+	public onNewConnection: (connection: WebSocket) => void;
 
 	/**
 	 * Starts up an express server with WS support on port 3001
 	 */
-	constructor(methodHandlers: MethodHandlers, server?: Application) {
+	constructor(server?: Application) {
 		this._server = server || expressWs(express()).app;
 
 		this._server.ws('/', connection => {
 			console.log('New connection!');
+			if (this.onNewConnection) this.onNewConnection(connection);
 
 			connection.on('message', (message: string) => {
 				console.log(`Client said ${message}`);
 
-				const functionName = message.split(' ')[0];
-				const args = JSON.parse(message.split(' ').splice(1).join(' '));
+				// If the message contains spaces and looks like the form 'call (funcName) (args)' try to call the
+				// respective handler
+				if (message.includes(' ')
+					&& message.split(' ').length >= 3
+					&& message.split(' ')[0] === 'call') {
 
-				const handler = this._handlers.get(functionName);
-				if (handler) {
-					let result = handler(...args);
+					const functionName = message.split(' ')[1];
+					const args = JSON.parse(message.split(' ').splice(2).join(' '));
 
-					if (result === undefined) result = null;
+					const handler = this.handlers.get(functionName);
+					if (handler) {
+						let result = handler(...args);
 
-					connection.send(`${functionName} ${JSON.stringify(result)}`);
+						if (result === undefined) result = null;
+
+						connection.send(`return ${functionName} ${JSON.stringify(result)}`);
+					}
 				}
 			});
 		});
 
 		this._server.listen(3001);
+	}
 
-		// -----------------------
-
-		this._handlers = new Map();
+	addMethodHandlers(methodHandlers: MethodHandlers) {
+		this.handlers = new Map();
 
 		for (const value of Object.getOwnPropertyNames(Object.getPrototypeOf(methodHandlers))) {
 			if (value === 'constructor') continue;
 
 			const uniqueFunction: Function = methodHandlers[value];
-			this._handlers.set(uniqueFunction.name, uniqueFunction);
+			this.handlers.set(uniqueFunction.name, uniqueFunction);
 		}
-	}
 
-	get handlers() {
-		return this._handlers;
+		return this;
 	}
 }

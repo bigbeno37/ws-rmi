@@ -22,7 +22,7 @@ let remote: ServerHandlers&RMIClient;
 describe('E2E', () => {
 	beforeAll(() => {
 		(global as any).WebSocket = WebSocket;
-		server = new RMIServer(new ServerHandlers());
+		server = new RMIServer().addMethodHandlers(new ServerHandlers());
 	});
 
 	beforeEach(async () => {
