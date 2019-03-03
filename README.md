@@ -19,6 +19,7 @@ On the server, call addMethodHandlers and simply pass in an instance:
 
 ```typescript
 import {RMIServer} from 'ws-rmi';
+import {ServerMethods} from './ServerMethods';
 
 const server = new RMIServer().addMethodHandlers(new ServerMethods());
 ```
@@ -40,6 +41,7 @@ Connecting the client to the server is quite simple. Create a new instance of RM
 
 ```typescript
 import {RMIClient} from 'ws-rmi';
+import {RemoteServerMethods} from './RemoteServerMethods';
 
 // new ServerMethods() is also applicable here
 const remote = new RMIClient().addRemoteMethods(new RemoteServerMethods());
@@ -49,6 +51,7 @@ From here, simply await (or .then()) the functions found in ServerMethods, and i
 
 ```typescript
 import {RMIClient} from 'ws-rmi';
+import {RemoteServerMethods} from './RemoteServerMethods';
 
 const remote = new RMIClient().addRemoteMethods(new RemoteServerMethods());
 
@@ -92,7 +95,10 @@ export class ClientHandlers implements MethodHandlers {
 Server.ts
 ```typescript
 import {RMIServer} from 'ws-rmi';
+import {RMIClient} from 'ws-rmi';
 import WebSocket from 'ws';
+import {ServerHandlers} from './ServerHandlers';
+import {ClientHandlers} from './ClientHandlers';
 
 const server = new RMIServer().addMethodHandlers(new ServerHandlers());
 server.onNewConnection = async (connection: WebSocket) => {
@@ -106,6 +112,7 @@ server.onNewConnection = async (connection: WebSocket) => {
 Client.ts
 ```typescript
 import {RMIClient} from 'ws-rmi';
+import {ServerMethods} from './ServerMethods';
 
 (async () => {
 	const remote = await new RMIClient().addRemoteMethods(new ServerMethods());
