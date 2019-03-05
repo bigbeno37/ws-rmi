@@ -1,46 +1,59 @@
-import {MethodHandlers, RemoteMethods} from "./src";
 import {Application} from "express-ws";
-import WsWebSocket from 'ws';
-
-export class RMIClient {
-	public connection: WebSocket;
-	public handlers: Map<string, Function>;
-
-	constructor(connection?: WebSocket);
+/**
+ * Parent class of [[RMIClient]] and [[RMIServer]], containing functions available
+ * to both such as addMethodHandlers
+ */
+export abstract class RMIContext {
+	methodHandlers: MethodHandlers;
 
 	/**
-	 * Adds the functions found in the remoteMethods instance and returns an object
-	 * containing those same functions that can interact with an RMIServer
-	 * @param remoteMethods
+	 * Adds a MethodHandlers instance to this instance's inner reference. It will then be called via a function name
+	 * call.
+	 * @param connection The connection to add this methodHandler to
+	 * @param methodHandlers The method handlers to add
 	 */
-	addRemoteMethods<T extends RemoteMethods>(remoteMethods: T): Promise<T&RMIClient>;
+	addMethodHandlers(connection: WebSocket, methodHandlers: MethodHandlers): RMIContext;
+}
+
+export class RMIClient extends RMIContext {
+	public connection: WebSocket;
+
+	private readonly _isConnected: Promise<void>;
+	handlers: Map<string, Function>;
+
+	constructor(options?: ClientOptions, connection?: WebSocket);
 
 	/**
-	 * Prepares for two way RMI via the remote app calling new RMIClient(...).addRemoteMethods(...).(funcName)
+	 * Calls [[RMIContext.addMethodHandlers]] to set methodHandlers as the instance to invoke upon receiving
+	 * a request to call a method
 	 * @param methodHandlers
 	 */
 	addMethodHandlers(methodHandlers: MethodHandlers): RMIClient;
+
+	/**
+	 * Returns arguments from a function string in the format [arg1, arg2, arg3...]
+	 * TODO: Doesn't account for newline and comment shenanigans
+	 * @param func
+	 */
+	private getArgs(func: string);
+
+	addRemoteMethods<T extends RemoteMethods>(remoteMethods: T): Promise<T&RMIClient>;
 }
 
 /**
  * Note: RMIServer is only available on NodeJS environments, as it automatically
  * loads an express server to handle websocket connections
  */
-export class RMIServer {
-	public handlers: Map<string, Function>;
-	public onNewConnection: (connection: WsWebSocket) => void;
+export class RMIServer extends RMIContext {
+	private readonly _server: Application;
+	public onNewConnection: (connection: WebSocket) => void;
 
 	/**
-	 * Starts up an express server listening for websockets on localhost:3001
-	 * @param server An Express application to use instead of starting a server. Used internally for testing
+	 * Starts up an express server with WS support on port 3001
 	 */
-	constructor(server?: Application);
+	constructor(options?: ServerOptions, server?: Application);
 
-	/**
-	 * Registers handlers with RMIServer so that clients can successfully call server methods
-	 * @param methodHandlers
-	 */
-	addMethodHandlers<T extends MethodHandlers>(methodHandlers: T): RMIServer&T;
+	addMethodHandlers(methodHandlers: MethodHandlers): this;
 }
 
 export interface RemoteMethods {
@@ -49,4 +62,12 @@ export interface RemoteMethods {
 
 export interface MethodHandlers extends RemoteMethods {
 	[index: string]: any
+}
+
+export type ClientOptions = {
+	port?: number
+}
+
+export type ServerOptions = {
+	port?: number
 }

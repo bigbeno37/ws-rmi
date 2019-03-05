@@ -1,12 +1,14 @@
 import {ClientOptions, MethodHandlers, RemoteMethods} from "./index";
+import {RMIContext} from "./RMIContext";
 
-export class RMIClient {
+export class RMIClient extends RMIContext {
 	public connection: WebSocket;
 
 	private readonly _isConnected: Promise<void>;
 	handlers: Map<string, Function>;
 
 	constructor(options?: ClientOptions, connection?: WebSocket) {
+		super();
 		let port = 3001;
 
 		if (options && options.port) {
@@ -21,44 +23,13 @@ export class RMIClient {
 		}
 	}
 
+	/**
+	 * Calls [[RMIContext.addMethodHandlers]] to set methodHandlers as the instance to invoke upon receiving
+	 * a request to call a method
+	 * @param methodHandlers
+	 */
 	addMethodHandlers(methodHandlers: MethodHandlers) {
-		// methodHandlers was passed in, establish two way RMI
-		this.handlers = new Map();
-
-		for (const value of Object.getOwnPropertyNames(Object.getPrototypeOf(methodHandlers))) {
-			if (value === 'constructor') continue;
-
-			const uniqueFunction: Function = methodHandlers[value];
-			this.handlers.set(uniqueFunction.name, uniqueFunction);
-		}
-
-		Object.keys(methodHandlers)
-			.filter(key => typeof key != 'function')
-			.forEach(key => (this as any)[key] = methodHandlers[key]);
-
-		this.connection.addEventListener('message', (message: {data: string}) => {
-			const data = message.data;
-			console.log(`Remote said ${data}`);
-
-			// If the data contains spaces and looks like the form 'call (funcName) (args)' try to call the
-			// respective handler
-			if (data.includes(' ')
-				&& data.split(' ').length >= 3
-				&& data.split(' ')[0] === 'call') {
-
-				const functionName = data.split(' ')[1];
-				const args = JSON.parse(data.split(' ').splice(2).join(' '));
-
-				const handler = this.handlers.get(functionName);
-				if (handler) {
-					let result = handler(...args);
-
-					if (result === undefined) result = null;
-
-					this.connection.send(`return ${functionName} ${JSON.stringify(result)}`);
-				}
-			}
-		});
+		super.addMethodHandlers(this.connection, methodHandlers);
 
 		return this;
 	}
@@ -91,7 +62,8 @@ export class RMIClient {
 
 			// Incredible amounts of jankery below, I'm sorry if there are bugs
 			const newFunctionBody =
-				`this.connection.send(\`call ${uniqueFunction.name} \$\{JSON.stringify([${args}])\}\`);
+				`console.log(\`Sending call ${uniqueFunction.name} \$\{JSON.stringify([${args}])\} to server!\`);
+				this.connection.send(\`call ${uniqueFunction.name} \$\{JSON.stringify([${args}])\}\`);
 	
 				return new Promise(resolve => {				
 					const listener = ({data}) => {						
@@ -109,7 +81,8 @@ export class RMIClient {
 						// just takes a while to return
 						
 						// If the message, however, does follow all these rules, resolve this promise
-						if (data.split(' ')[1] === '${uniqueFunction.name}') {						
+						if (data.split(' ')[1] === '${uniqueFunction.name}') {
+							console.log(\`Server sent \${data} to client!\`);
 							this.connection.removeEventListener('message', listener);
 	
 							resolve( JSON.parse( data.split(' ').splice(2).join(' ') ) );

@@ -8,6 +8,7 @@ class ServerHandlers implements MethodHandlers {
 
 	constructor() {
 		this._messages = [];
+		console.log();
 	}
 
 	calculateSum(num1: number, num2: number): number {

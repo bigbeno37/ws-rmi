@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;index&quot; | ws-rmi</title>
+	<title>RMIContext | ws-rmi</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,74 +56,114 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_index_.html">&quot;index&quot;</a>
+					<a href="../modules/_rmicontext_.html">&quot;RMIContext&quot;</a>
+				</li>
+				<li>
+					<a href="_rmicontext_.rmicontext.html">RMIContext</a>
 				</li>
 			</ul>
-			<h1>External module &quot;index&quot;</h1>
+			<h1>Class RMIContext</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Parent class of <a href="_rmiclient_.rmiclient.html">RMIClient</a> and <a href="_rmiserver_.rmiserver.html">RMIServer</a>, containing functions available
+						to both such as addMethodHandlers</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">RMIContext</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="_rmiclient_.rmiclient.html" class="tsd-signature-type">RMIClient</a>
+							</li>
+							<li>
+								<a href="_rmiserver_.rmiserver.html" class="tsd-signature-type">RMIServer</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_index_.methodhandlers.html" class="tsd-kind-icon">Method<wbr>Handlers</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_index_.remotemethods.html" class="tsd-kind-icon">Remote<wbr>Methods</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_rmicontext_.rmicontext.html#methodhandlers" class="tsd-kind-icon">method<wbr>Handlers</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
-							<h3>Type aliases</h3>
+							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="_index_.html#clientoptions" class="tsd-kind-icon">Client<wbr>Options</a></li>
-								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="_index_.html#serveroptions" class="tsd-kind-icon">Server<wbr>Options</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_rmicontext_.rmicontext.html#addmethodhandlers" class="tsd-kind-icon">add<wbr>Method<wbr>Handlers</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Type aliases</h2>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
-					<a name="clientoptions" class="tsd-anchor"></a>
-					<h3>Client<wbr>Options</h3>
-					<div class="tsd-signature tsd-kind-icon">Client<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="methodhandlers" class="tsd-anchor"></a>
+					<h3>method<wbr>Handlers</h3>
+					<div class="tsd-signature tsd-kind-icon">method<wbr>Handlers<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_index_.methodhandlers.html" class="tsd-signature-type">MethodHandlers</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/eb5aab9/src/index.ts#L11">index.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/eb5aab9/src/RMIContext.ts#L8">RMIContext.ts:8</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter">
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> port<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
-							</li>
-						</ul>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
-					<a name="serveroptions" class="tsd-anchor"></a>
-					<h3>Server<wbr>Options</h3>
-					<div class="tsd-signature tsd-kind-icon">Server<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/eb5aab9/src/index.ts#L15">index.ts:15</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter">
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> port<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
-							</li>
-						</ul>
-					</div>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="addmethodhandlers" class="tsd-anchor"></a>
+					<h3>add<wbr>Method<wbr>Handlers</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Method<wbr>Handlers<span class="tsd-signature-symbol">(</span>connection<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WebSocket</span>, methodHandlers<span class="tsd-signature-symbol">: </span><a href="../interfaces/_index_.methodhandlers.html" class="tsd-signature-type">MethodHandlers</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/eb5aab9/src/RMIContext.ts#L16">RMIContext.ts:16</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Adds a MethodHandlers instance to this instance&#39;s inner reference. It will then be called via a function name
+									call.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>connection: <span class="tsd-signature-type">WebSocket</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The connection to add this methodHandler to</p>
+									</div>
+								</li>
+								<li>
+									<h5>methodHandlers: <a href="../interfaces/_index_.methodhandlers.html" class="tsd-signature-type">MethodHandlers</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The method handlers to add</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -134,33 +174,36 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_rmiclient_.html">"RMIClient"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_rmicontext_.html">"RMIContext"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_rmiserver_.html">"RMIServer"</a>
+						<a href="../modules/_rmiclient_.html">"RMIClient"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_index_.html">"index"</a>
+						<a href="../modules/_rmicontext_.html">"RMIContext"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_rmiserver_.html">"RMIServer"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_index_.html">"index"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/_index_.methodhandlers.html" class="tsd-kind-icon">Method<wbr>Handlers</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_rmicontext_.rmicontext.html" class="tsd-kind-icon">RMIContext</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_rmicontext_.rmicontext.html#methodhandlers" class="tsd-kind-icon">method<wbr>Handlers</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_rmicontext_.rmicontext.html#addmethodhandlers" class="tsd-kind-icon">add<wbr>Method<wbr>Handlers</a>
+							</li>
+						</ul>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/_index_.remotemethods.html" class="tsd-kind-icon">Remote<wbr>Methods</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="_index_.html#clientoptions" class="tsd-kind-icon">Client<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="_index_.html#serveroptions" class="tsd-kind-icon">Server<wbr>Options</a>
-					</li>
+				</ul>
+				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>

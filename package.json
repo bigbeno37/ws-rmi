@@ -1,6 +1,6 @@
 {
   "name": "ws-rmi",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "RMI in Javascript through native WebSocket",
   "files": [
     "/dist",
@@ -12,7 +12,7 @@
     "build": "{src,tests}/**/*.ts"
   },
   "scripts": {
-    "build:docs": "typedoc src/ --out docs/ --mode modules --exclude *.test.ts --module commonjs --target ES6",
+    "build:docs": "typedoc src/ --out docs/ --mode modules --exclude *.test.ts --module commonjs --target ES6 && echo > docs/.nojekyll",
     "build": "tsc && npm run build:docs",
     "watch": "npm-watch",
     "test": "jest"

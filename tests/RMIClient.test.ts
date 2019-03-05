@@ -79,11 +79,4 @@ describe('RMIClient', () => {
 		expect(array[0]).toBe('Hello, ');
 		expect(array[1]).toBe('World!');
 	});
-
-	it('registers handlers', () => {
-		expect(remote.handlers.has('add')).toBeTruthy();
-		expect(remote.handlers.has('subtract')).toBeTruthy();
-	});
-
-
 });

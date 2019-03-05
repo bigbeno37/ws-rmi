@@ -31,13 +31,8 @@ describe('RMIServer', () => {
 
 	beforeEach(() => {
 		ws = jest.fn();
-		ws.on = jest.fn((type: string, handler: (message: string) => void) => sendMessageToServer = handler);
+		ws.addEventListener = jest.fn((type: string, handler: (message: string) => void) => sendMessageToServer = handler);
 		ws.send = jest.fn();
-	});
-
-	it('sets the handlers correctly', () => {
-		expect(serverRmi.handlers.has('bound calculateSum')).toBeTruthy();
-		expect(serverRmi.handlers.has('bound createArray')).toBeTruthy();
 	});
 
 	it('returns the correct value when calculateSum is called', () => {
