@@ -1,6 +1,6 @@
 import express from 'express';
 import expressWs, {Application} from 'express-ws';
-import {MethodHandlers} from "./index";
+import {MethodHandlers, ServerOptions} from "./index";
 import WebSocket from 'ws';
 
 export class RMIServer {
@@ -11,7 +11,7 @@ export class RMIServer {
 	/**
 	 * Starts up an express server with WS support on port 3001
 	 */
-	constructor(server?: Application) {
+	constructor(options?: ServerOptions, server?: Application) {
 		this._server = server || expressWs(express()).app;
 
 		this._server.ws('/', connection => {
@@ -30,7 +30,7 @@ export class RMIServer {
 					const functionName = message.split(' ')[1];
 					const args = JSON.parse(message.split(' ').splice(2).join(' '));
 
-					const handler = this.handlers.get(functionName);
+					const handler = this.handlers.get('bound ' + functionName);
 					if (handler) {
 						let result = handler(...args);
 
@@ -42,19 +42,28 @@ export class RMIServer {
 			});
 		});
 
-		this._server.listen(3001);
+		if (options && options.port) {
+			this._server.listen(options.port);
+		} else {
+			this._server.listen(3001);
+		}
 	}
 
-	addMethodHandlers(methodHandlers: MethodHandlers) {
+	addMethodHandlers<T extends MethodHandlers>(methodHandlers: T): RMIServer&T {
 		this.handlers = new Map();
 
 		for (const value of Object.getOwnPropertyNames(Object.getPrototypeOf(methodHandlers))) {
 			if (value === 'constructor') continue;
 
-			const uniqueFunction: Function = methodHandlers[value];
+			const uniqueFunction: Function = methodHandlers[value].bind(this);
 			this.handlers.set(uniqueFunction.name, uniqueFunction);
 		}
 
-		return this;
+		Object.keys(methodHandlers)
+			.filter(key => typeof key != 'function')
+			.forEach(key => (this as any)[key] = methodHandlers[key]);
+
+		// @ts-ignore
+		return this as RMIServer&T;
 	}
 }

@@ -25,7 +25,7 @@ describe('RMIServer', () => {
 		server.ws = jest.fn((url: string, handler: (connection: WebSocket) => void) => connectClient = handler);
 		server.listen = jest.fn();
 
-		serverRmi = new RMIServer(server).addMethodHandlers(new ServerHandlers());
+		serverRmi = new RMIServer({}, server).addMethodHandlers(new ServerHandlers());
 		serverRmi.onNewConnection = jest.fn();
 	});
 
@@ -36,8 +36,8 @@ describe('RMIServer', () => {
 	});
 
 	it('sets the handlers correctly', () => {
-		expect(serverRmi.handlers.has('calculateSum')).toBeTruthy();
-		expect(serverRmi.handlers.has('createArray')).toBeTruthy();
+		expect(serverRmi.handlers.has('bound calculateSum')).toBeTruthy();
+		expect(serverRmi.handlers.has('bound createArray')).toBeTruthy();
 	});
 
 	it('returns the correct value when calculateSum is called', () => {

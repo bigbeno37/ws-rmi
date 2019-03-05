@@ -42,7 +42,7 @@ describe('RMIClient', () => {
 		});
 		connection.removeEventListener = jest.fn();
 
-		const remotePromise = new RMIClient(connection);
+		const remotePromise = new RMIClient({}, connection);
 		mockOpenConnection();
 		remote = await remotePromise.addRemoteMethods(new ServerMethods());
 		remote.addMethodHandlers(new ClientMethodHandlers());

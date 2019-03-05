@@ -40,7 +40,7 @@ export class RMIServer {
 	 * Registers handlers with RMIServer so that clients can successfully call server methods
 	 * @param methodHandlers
 	 */
-	addMethodHandlers(methodHandlers: MethodHandlers): RMIServer;
+	addMethodHandlers<T extends MethodHandlers>(methodHandlers: T): RMIServer&T;
 }
 
 export interface RemoteMethods {

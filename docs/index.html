@@ -78,6 +78,7 @@
 				<p>On the server, call addMethodHandlers and simply pass in an instance:
 				<strong>(NOTE: RMIServer requires an es6+ environment to work!)</strong></p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {RMIServer} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+<span class="hljs-keyword">import</span> {ServerMethods} <span class="hljs-keyword">from</span> <span class="hljs-string">'./ServerMethods'</span>;
 
 <span class="hljs-keyword">const</span> server = <span class="hljs-keyword">new</span> RMIServer().addMethodHandlers(<span class="hljs-keyword">new</span> ServerMethods());</code></pre>
 				<p>This will automatically spin up an express server on port 3001 listening for WebSocket connections. If using Typescript, a quick and easy way to launch a <code>server.ts</code> file is to use <code>ts-node</code> with the command <code>ts-node -O &#39;{&quot;module&quot;: &quot;commonjs&quot;, &quot;target&quot;: &quot;ES6&quot;}&#39; server.ts</code>. Note that the -O {...} argument can be removed if a tsconfig file is set up with target ES6 or above and module set to commonjs.</p>
@@ -90,11 +91,13 @@
 }</code></pre>
 				<p>Connecting the client to the server is quite simple. Create a new instance of RMIClient and simply pass an instance of either ServerMethods of RemoteServerMethods (as seen in the examples above) into <em>addRemoteMethods</em>:</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {RMIClient} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+<span class="hljs-keyword">import</span> {RemoteServerMethods} <span class="hljs-keyword">from</span> <span class="hljs-string">'./RemoteServerMethods'</span>;
 
 <span class="hljs-comment">// new ServerMethods() is also applicable here</span>
 <span class="hljs-keyword">const</span> remote = <span class="hljs-keyword">new</span> RMIClient().addRemoteMethods(<span class="hljs-keyword">new</span> RemoteServerMethods());</code></pre>
 				<p>From here, simply await (or .then()) the functions found in ServerMethods, and it will work like native javascript. If using Typescript, you&#39;ll also have native autocompletion and typing support right out of the box.</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {RMIClient} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+<span class="hljs-keyword">import</span> {RemoteServerMethods} <span class="hljs-keyword">from</span> <span class="hljs-string">'./RemoteServerMethods'</span>;
 
 <span class="hljs-keyword">const</span> remote = <span class="hljs-keyword">new</span> RMIClient().addRemoteMethods(<span class="hljs-keyword">new</span> RemoteServerMethods());
 
@@ -127,7 +130,10 @@
 }</code></pre>
 				<p>Server.ts</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {RMIServer} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+<span class="hljs-keyword">import</span> {RMIClient} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
 <span class="hljs-keyword">import</span> WebSocket <span class="hljs-keyword">from</span> <span class="hljs-string">'ws'</span>;
+<span class="hljs-keyword">import</span> {ServerHandlers} <span class="hljs-keyword">from</span> <span class="hljs-string">'./ServerHandlers'</span>;
+<span class="hljs-keyword">import</span> {ClientHandlers} <span class="hljs-keyword">from</span> <span class="hljs-string">'./ClientHandlers'</span>;
 
 <span class="hljs-keyword">const</span> server = <span class="hljs-keyword">new</span> RMIServer().addMethodHandlers(<span class="hljs-keyword">new</span> ServerHandlers());
 server.onNewConnection = <span class="hljs-keyword">async</span> (connection: WebSocket) =&gt; {
@@ -138,6 +144,7 @@ server.onNewConnection = <span class="hljs-keyword">async</span> (connection: We
 }</code></pre>
 				<p>Client.ts</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {RMIClient} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+<span class="hljs-keyword">import</span> {ServerMethods} <span class="hljs-keyword">from</span> <span class="hljs-string">'./ServerMethods'</span>;
 
 <span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
     <span class="hljs-keyword">const</span> remote = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> RMIClient(<span class="hljs-params"></span>).addRemoteMethods(<span class="hljs-params"><span class="hljs-keyword">new</span> ServerMethods(<span class="hljs-params"></span>)</span>);

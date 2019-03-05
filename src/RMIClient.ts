@@ -1,4 +1,4 @@
-import {MethodHandlers, RemoteMethods} from "./index";
+import {ClientOptions, MethodHandlers, RemoteMethods} from "./index";
 
 export class RMIClient {
 	public connection: WebSocket;
@@ -6,8 +6,14 @@ export class RMIClient {
 	private readonly _isConnected: Promise<void>;
 	handlers: Map<string, Function>;
 
-	constructor(connection?: WebSocket) {
-		this.connection = connection || new WebSocket('ws://localhost:3001/');
+	constructor(options?: ClientOptions, connection?: WebSocket) {
+		let port = 3001;
+
+		if (options && options.port) {
+			port = options.port;
+		}
+
+		this.connection = connection || new WebSocket(`ws://localhost:${port}/`);
 
 		// If this connection isn't OPEN, create a new promise that resolves when it becomes open
 		if (this.connection.readyState !== 1) {
@@ -25,6 +31,10 @@ export class RMIClient {
 			const uniqueFunction: Function = methodHandlers[value];
 			this.handlers.set(uniqueFunction.name, uniqueFunction);
 		}
+
+		Object.keys(methodHandlers)
+			.filter(key => typeof key != 'function')
+			.forEach(key => (this as any)[key] = methodHandlers[key]);
 
 		this.connection.addEventListener('message', (message: {data: string}) => {
 			const data = message.data;
@@ -84,9 +94,7 @@ export class RMIClient {
 				`this.connection.send(\`call ${uniqueFunction.name} \$\{JSON.stringify([${args}])\}\`);
 	
 				return new Promise(resolve => {				
-					const listener = ({data}) => {
-						console.log(\`Server said \$\{data\}\`);
-						
+					const listener = ({data}) => {						
 						// This can't be our message if:
 						// It doesn't have any spaces
 						if (!data.includes(' ')) return;

@@ -8,6 +8,14 @@ if (typeof window === 'undefined') {
 	exports.RMIServer = RMIServer;
 }
 
+export type ClientOptions = {
+	port?: number
+}
+
+export type ServerOptions = {
+	port?: number
+}
+
 export interface RemoteMethods {
 	[index: string]: any
 }
