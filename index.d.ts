@@ -1,10 +1,14 @@
 import {Application} from "express-ws";
+
 /**
  * Parent class of [[RMIClient]] and [[RMIServer]], containing functions available
  * to both such as addMethodHandlers
  */
 export abstract class RMIContext {
 	methodHandlers: MethodHandlers;
+	private _messageHandlers: ((message: string) => void)[];
+
+	protected constructor();
 
 	/**
 	 * Adds a MethodHandlers instance to this instance's inner reference. It will then be called via a function name
@@ -13,6 +17,14 @@ export abstract class RMIContext {
 	 * @param methodHandlers The method handlers to add
 	 */
 	addMethodHandlers(connection: WebSocket, methodHandlers: MethodHandlers): RMIContext;
+
+	onMessage(callback: (message: string) => void): void;
+
+	removeMessageCallback(callback: (message: string) => void): void;
+
+	protected removeCallback(handlers: ((...args: any[]) => any)[], callback: Function): ((...args: any[]) => any)[];
+
+	protected invokeCallbacks(callbacks: ((...args: any[]) => any)[], ...args: any[]): void;
 }
 
 export class RMIClient extends RMIContext {
@@ -46,7 +58,8 @@ export class RMIClient extends RMIContext {
  */
 export class RMIServer extends RMIContext {
 	private readonly _server: Application;
-	public onNewConnection: (connection: WebSocket) => void;
+	private _newConnectionHandlers: ((connection: WebSocket) => void)[];
+	private _clientDisconnectHandlers: ((connection: WebSocket) => void)[];
 
 	/**
 	 * Starts up an express server with WS support on port 3001
@@ -54,6 +67,15 @@ export class RMIServer extends RMIContext {
 	constructor(options?: ServerOptions, server?: Application);
 
 	addMethodHandlers(methodHandlers: MethodHandlers): this;
+
+	// Event callbacks
+	onNewConnection(callback: (connection: WebSocket) => void): void;
+
+	removeNewConnectionCallback(callback: (connection: WebSocket) => void): void;
+
+	onClientDisconnect(callback: (connection: WebSocket) => void): void;
+
+	removeClientDisconnectCallback(callback: (connection: WebSocket) => void): void;
 }
 
 export interface RemoteMethods {

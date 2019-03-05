@@ -1,6 +1,6 @@
 {
   "name": "ws-rmi",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "RMI in Javascript through native WebSocket",
   "files": [
     "/dist",
