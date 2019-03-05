@@ -6,6 +6,11 @@ import {MethodHandlers} from "./index";
  */
 export abstract class RMIContext {
 	methodHandlers: MethodHandlers;
+	private _messageHandlers: ((message: string) => void)[];
+
+	protected constructor() {
+		this._messageHandlers = [];
+	}
 
 	/**
 	 * Adds a MethodHandlers instance to this instance's inner reference. It will then be called via a function name
@@ -41,5 +46,21 @@ export abstract class RMIContext {
 		});
 
 		return this;
+	}
+
+	onMessage(callback: (message: string) => void) {
+		this._messageHandlers.push(callback);
+	}
+
+	removeMessageCallback(callback: (message: string) => void) {
+		this._messageHandlers = this.removeCallback(this._messageHandlers, callback);
+	}
+
+	protected removeCallback(handlers: ((...args: any[]) => any)[], callback: Function) {
+		return handlers.filter(handler => handler != callback);
+	}
+
+	protected invokeCallbacks(callbacks: ((...args: any[]) => any)[], ...args: any[]) {
+		callbacks.forEach(callback => callback(...args));
 	}
 }

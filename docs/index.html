@@ -137,7 +137,7 @@
 
 <span class="hljs-keyword">const</span> server = <span class="hljs-keyword">new</span> RMIServer().addMethodHandlers(<span class="hljs-keyword">new</span> ServerHandlers());
 server.onNewConnection = <span class="hljs-keyword">async</span> (connection: WebSocket) =&gt; {
-    <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> RMIClient(connection <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>).addRemoteMethods(<span class="hljs-keyword">new</span> ClientHandlers());
+    <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> RMIClient({}, connection <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>).addRemoteMethods(<span class="hljs-keyword">new</span> ClientHandlers());
 
     <span class="hljs-comment">// Client says 3-2 is 1</span>
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Client says 3-2 is <span class="hljs-subst">${await client.subtract(3,2)}</span>`</span>);
@@ -169,6 +169,8 @@ server.onNewConnection = <span class="hljs-keyword">async</span> (connection: We
 <span class="hljs-comment">// Client receives "return calculateSum 3"</span>
 <span class="hljs-comment">// Client resolves promise with value 3</span>
 <span class="hljs-comment">// "sum" now has value of 3</span></code></pre>
+				<h2 id="documentation">Documentation</h2>
+				<p>Documentation is available on this repo&#39;s Github Page, located at <a href="https://bigbeno37.github.io/ws-rmi">https://bigbeno37.github.io/ws-rmi</a></p>
 				<h2 id="how-can-i-contribute">How can I contribute</h2>
 				<h3 id="how-to-build-test-ws-rmi">How to build / test ws-rmi</h3>
 				<p>To build ws-rmi, run <code>npm run build</code>, which will start up Typescript&#39;s compilation system and build the Typedoc docs with each edit it detects. </p>

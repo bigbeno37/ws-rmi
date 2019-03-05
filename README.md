@@ -102,7 +102,7 @@ import {ClientHandlers} from './ClientHandlers';
 
 const server = new RMIServer().addMethodHandlers(new ServerHandlers());
 server.onNewConnection = async (connection: WebSocket) => {
-	const client = await new RMIClient(connection as any).addRemoteMethods(new ClientHandlers());
+	const client = await new RMIClient({}, connection as any).addRemoteMethods(new ClientHandlers());
 	
 	// Client says 3-2 is 1
 	console.log(`Client says 3-2 is ${await client.subtract(3,2)}`);
@@ -145,6 +145,9 @@ const sum = await remote.calculateSum(1, 2);
 // Client resolves promise with value 3
 // "sum" now has value of 3
 ```
+
+## Documentation
+Documentation is available on this repo's Github Page, located at https://bigbeno37.github.io/ws-rmi
 
 ## How can I contribute
 ### How to build / test ws-rmi
