@@ -23,11 +23,14 @@ export class RMIServer extends RMIContext {
 			super.addMethodHandlers(connection as any, this.methodHandlers);
 		});
 
+		let port = 3001;
+
 		if (options && options.port) {
-			this._server.listen(options.port);
-		} else {
-			this._server.listen(3001);
+			port = options.port;
 		}
+
+		this._server.listen(port);
+		console.log(`Server listening on port ${port}!`)
 	}
 
 	addMethodHandlers(methodHandlers: MethodHandlers): this {
