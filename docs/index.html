@@ -65,7 +65,119 @@
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
 				<h1 id="ws-rmi">ws-rmi</h1>
-				<p>RMI in Javascript through native WebSocket</p>
+				<p>RMI in Javascript through native WebSocket connections</p>
+				<h2 id="how-to-use">How to use</h2>
+				<p>Using ws-rmi is extremely simple, and is meant to be paired up with a type system like Typescript for native autocompletion and type checking. To begin, define a class your remote offers and that can be called by the client (note this must extend MethodHandlers):</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {MethodHandlers} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> ServerMethods <span class="hljs-keyword">extends</span> MethodHandlers {
+    calculateSum(num1: <span class="hljs-built_in">number</span>, num2: <span class="hljs-built_in">number</span>): <span class="hljs-built_in">number</span> {
+        <span class="hljs-keyword">return</span> num1+num2;
+    }
+}</code></pre>
+				<p>On the server, call addMethodHandlers and simply pass in an instance:
+				<strong>(NOTE: RMIServer requires an es6+ environment to work!)</strong></p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {RMIServer} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+<span class="hljs-keyword">import</span> {ServerMethods} <span class="hljs-keyword">from</span> <span class="hljs-string">'./ServerMethods'</span>;
+
+<span class="hljs-keyword">const</span> server = <span class="hljs-keyword">new</span> RMIServer().addMethodHandlers(<span class="hljs-keyword">new</span> ServerMethods());</code></pre>
+				<p>This will automatically spin up an express server on port 3001 listening for WebSocket connections. If using Typescript, a quick and easy way to launch a <code>server.ts</code> file is to use <code>ts-node</code> with the command <code>ts-node -O &#39;{&quot;module&quot;: &quot;commonjs&quot;, &quot;target&quot;: &quot;ES6&quot;}&#39; server.ts</code>. Note that the -O {...} argument can be removed if a tsconfig file is set up with target ES6 or above and module set to commonjs.</p>
+				<p>To allow a client to use the methods specified in ServerMethods, either an instance of ServerMethods or an interface-like class must be provided. An example of an interface-like class is as follows:</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {RemoteMethods} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+
+<span class="hljs-keyword">class</span> RemoteServerMethods <span class="hljs-keyword">extends</span> RemoteMethods {
+    <span class="hljs-comment">// @ts-ignore</span>
+    calculateSum(num1: <span class="hljs-built_in">number</span>, num2: <span class="hljs-built_in">number</span>): <span class="hljs-built_in">number</span> {}
+}</code></pre>
+				<p>Connecting the client to the server is quite simple. Create a new instance of RMIClient and simply pass an instance of either ServerMethods of RemoteServerMethods (as seen in the examples above) into <em>addRemoteMethods</em>:</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {RMIClient} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+<span class="hljs-keyword">import</span> {RemoteServerMethods} <span class="hljs-keyword">from</span> <span class="hljs-string">'./RemoteServerMethods'</span>;
+
+<span class="hljs-comment">// new ServerMethods() is also applicable here</span>
+<span class="hljs-keyword">const</span> remote = <span class="hljs-keyword">new</span> RMIClient().addRemoteMethods(<span class="hljs-keyword">new</span> RemoteServerMethods());</code></pre>
+				<p>From here, simply await (or .then()) the functions found in ServerMethods, and it will work like native javascript. If using Typescript, you&#39;ll also have native autocompletion and typing support right out of the box.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {RMIClient} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+<span class="hljs-keyword">import</span> {RemoteServerMethods} <span class="hljs-keyword">from</span> <span class="hljs-string">'./RemoteServerMethods'</span>;
+
+<span class="hljs-keyword">const</span> remote = <span class="hljs-keyword">new</span> RMIClient().addRemoteMethods(<span class="hljs-keyword">new</span> RemoteServerMethods());
+
+<span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-keyword">const</span> sum = <span class="hljs-keyword">await</span> remote.calculateSum(<span class="hljs-params">1, 2</span>);
+
+    <span class="hljs-comment">// 3</span>
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-params">sum</span>);
+}</span>)<span class="hljs-params">()</span>;</span></code></pre>
+				<p><strong>NOTE: Internally ws-rmi utilises JSON.stringify and JSON.parse, so functions will disappear inside objects (eg. class instances)</strong></p>
+				<h2 id="two-way-rmi">Two way RMI</h2>
+				<p>ws-rmi has built in support for two way communication between a remote and client connection. Doing this is essentially the same as above,
+					but on the remote end you can create a new instance of RMIClient, pass in a connection, and call addRemoteMethods like normal. An example is
+				shown below:</p>
+				<p>ServerHandlers.ts</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {MethodHandlers} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> ServerHandlers <span class="hljs-keyword">implements</span> MethodHandlers {
+    add(num1: <span class="hljs-built_in">number</span>, num2: <span class="hljs-built_in">number</span>) {
+        <span class="hljs-keyword">return</span> num1+num2;
+    }
+}</code></pre>
+				<p>ClientHandlers.ts</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {MethodHandlers} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> ClientHandlers <span class="hljs-keyword">implements</span> MethodHandlers {
+    subtract(num1: <span class="hljs-built_in">number</span>, num2: <span class="hljs-built_in">number</span>) {
+        <span class="hljs-keyword">return</span> num1-num2;    
+    }
+}</code></pre>
+				<p>Server.ts</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {RMIServer} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+<span class="hljs-keyword">import</span> {RMIClient} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+<span class="hljs-keyword">import</span> WebSocket <span class="hljs-keyword">from</span> <span class="hljs-string">'ws'</span>;
+<span class="hljs-keyword">import</span> {ServerHandlers} <span class="hljs-keyword">from</span> <span class="hljs-string">'./ServerHandlers'</span>;
+<span class="hljs-keyword">import</span> {ClientHandlers} <span class="hljs-keyword">from</span> <span class="hljs-string">'./ClientHandlers'</span>;
+
+<span class="hljs-keyword">const</span> server = <span class="hljs-keyword">new</span> RMIServer().addMethodHandlers(<span class="hljs-keyword">new</span> ServerHandlers());
+server.onNewConnection = <span class="hljs-keyword">async</span> (connection: WebSocket) =&gt; {
+    <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> RMIClient({}, connection <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>).addRemoteMethods(<span class="hljs-keyword">new</span> ClientHandlers());
+
+    <span class="hljs-comment">// Client says 3-2 is 1</span>
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Client says 3-2 is <span class="hljs-subst">${await client.subtract(3,2)}</span>`</span>);
+}</code></pre>
+				<p>Client.ts</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {RMIClient} <span class="hljs-keyword">from</span> <span class="hljs-string">'ws-rmi'</span>;
+<span class="hljs-keyword">import</span> {ServerMethods} <span class="hljs-keyword">from</span> <span class="hljs-string">'./ServerMethods'</span>;
+
+<span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-keyword">const</span> remote = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> RMIClient(<span class="hljs-params"></span>).addRemoteMethods(<span class="hljs-params"><span class="hljs-keyword">new</span> ServerMethods(<span class="hljs-params"></span>)</span>);
+    remote.addMethodHandlers(<span class="hljs-params"><span class="hljs-keyword">new</span> ClientMethods(<span class="hljs-params"></span>)</span>);
+
+    <span class="hljs-comment">// Server says 1+2 is 3</span>
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-params">`Server says 1+2 is ${<span class="hljs-keyword">await</span> remote.add(<span class="hljs-params">1,2</span>)}`</span>);
+}</span>)<span class="hljs-params">()</span>;</span></code></pre>
+				<h2 id="how-does-it-work-">How does it work?</h2>
+				<p>Internally, ws-rmi utilises WebSocket messages to convey what needs to get called. Initially, a class instance is sent to RMIClient, whose prototype methods are replaced with a function that will send the original name of the functions as well as any parameters as an array via JSON.stringify to the server.</p>
+				<p>When the server is first initialised, it looks through the prototype of the instance passed in and adds the name and function into its own Map. When the server receives a WebSocket message, it determines if there&#39;s a corresponding function to the one in the message (e.g. the client may send &#39;call calculate [1,2]&#39;, and the Server will then find calculateSum). </p>
+				<p>This function is then called, and its response (in addition to its name) is returned to the client so that the client&#39;s promise may be resolved.</p>
+				<p>A typical use case is as follows:</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> sum = <span class="hljs-keyword">await</span> remote.calculateSum(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);
+
+<span class="hljs-comment">// Client sends "call calculateSum [1,2]"</span>
+<span class="hljs-comment">// Client waits for a message containing "return calculateSum"</span>
+<span class="hljs-comment">// Server receives "call calculateSum [1,2]"</span>
+<span class="hljs-comment">// Server retrieves a function from its map with key "calculateSum"</span>
+<span class="hljs-comment">// Server executes calculateSum(1,2)</span>
+<span class="hljs-comment">// Server sends back the result in the form "return calculateSum 3"</span>
+<span class="hljs-comment">// Client receives "return calculateSum 3"</span>
+<span class="hljs-comment">// Client resolves promise with value 3</span>
+<span class="hljs-comment">// "sum" now has value of 3</span></code></pre>
+				<h2 id="documentation">Documentation</h2>
+				<p>Documentation is available on this repo&#39;s Github Page, located at <a href="https://bigbeno37.github.io/ws-rmi">https://bigbeno37.github.io/ws-rmi</a></p>
+				<h2 id="how-can-i-contribute">How can I contribute</h2>
+				<h3 id="how-to-build-test-ws-rmi">How to build / test ws-rmi</h3>
+				<p>To build ws-rmi, run <code>npm run build</code>, which will start up Typescript&#39;s compilation system and build the Typedoc docs with each edit it detects. </p>
+				<p>ws-rmi uses Jest as its testing platform, and to test your changes simply run <code>npm run test</code>.</p>
+				<h3 id="what-can-i-do-to-help-">What can I do to help?</h3>
+				<p>Documentation is always a critical part of any project, as are unit tests. If you feel ws-rmi is missing out in any of these aspects, feel free to make a pull request and we&#39;ll take a look.</p>
+				<p>Alternatively, take a look at the current issues and if you see one you&#39;d like to tackle, go ahead. Just make sure you generally use our code style and have a good amount of tests to back up your changes.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -76,6 +188,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_rmiclient_.html">"RMIClient"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_rmicontext_.html">"RMIContext"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_rmiserver_.html">"RMIServer"</a>

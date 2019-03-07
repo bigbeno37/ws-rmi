@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RMIClient | ws-rmi</title>
+	<title>RMIContext | ws-rmi</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,27 +56,38 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_rmiclient_.html">&quot;RMIClient&quot;</a>
+					<a href="../modules/_rmicontext_.html">&quot;RMIContext&quot;</a>
 				</li>
 				<li>
-					<a href="_rmiclient_.rmiclient.html">RMIClient</a>
+					<a href="_rmicontext_.rmicontext.html">RMIContext</a>
 				</li>
 			</ul>
-			<h1>Class RMIClient</h1>
+			<h1>Class RMIContext</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Parent class of <a href="_rmiclient_.rmiclient.html">RMIClient</a> and <a href="_rmiserver_.rmiserver.html">RMIServer</a>, containing functions available
+						to both such as addMethodHandlers</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="_rmicontext_.rmicontext.html" class="tsd-signature-type">RMIContext</a>
+						<span class="target">RMIContext</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">RMIClient</span>
+								<a href="_rmiclient_.rmiclient.html" class="tsd-signature-type">RMIClient</a>
+							</li>
+							<li>
+								<a href="_rmiserver_.rmiserver.html" class="tsd-signature-type">RMIServer</a>
 							</li>
 						</ul>
 					</li>
@@ -86,62 +97,48 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-private-protected">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="_rmiclient_.rmiclient.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-protected"><a href="_rmicontext_.rmicontext.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_rmiclient_.rmiclient.html#_isconnected" class="tsd-kind-icon">_is<wbr>Connected</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_rmiclient_.rmiclient.html#connection" class="tsd-kind-icon">connection</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_rmiclient_.rmiclient.html#handlers" class="tsd-kind-icon">handlers</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_rmiclient_.rmiclient.html#methodhandlers" class="tsd-kind-icon">method<wbr>Handlers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_rmicontext_.rmicontext.html#_messagehandlers" class="tsd-kind-icon">_message<wbr>Handlers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_rmicontext_.rmicontext.html#methodhandlers" class="tsd-kind-icon">method<wbr>Handlers</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_rmiclient_.rmiclient.html#addmethodhandlers" class="tsd-kind-icon">add<wbr>Method<wbr>Handlers</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_rmiclient_.rmiclient.html#addremotemethods" class="tsd-kind-icon">add<wbr>Remote<wbr>Methods</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_rmiclient_.rmiclient.html#getargs" class="tsd-kind-icon">get<wbr>Args</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_rmiclient_.rmiclient.html#invokecallbacks" class="tsd-kind-icon">invoke<wbr>Callbacks</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_rmiclient_.rmiclient.html#onmessage" class="tsd-kind-icon">on<wbr>Message</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_rmiclient_.rmiclient.html#removecallback" class="tsd-kind-icon">remove<wbr>Callback</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_rmiclient_.rmiclient.html#removemessagecallback" class="tsd-kind-icon">remove<wbr>Message<wbr>Callback</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_rmicontext_.rmicontext.html#addmethodhandlers" class="tsd-kind-icon">add<wbr>Method<wbr>Handlers</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_rmicontext_.rmicontext.html#invokecallbacks" class="tsd-kind-icon">invoke<wbr>Callbacks</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_rmicontext_.rmicontext.html#onmessage" class="tsd-kind-icon">on<wbr>Message</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_rmicontext_.rmicontext.html#removecallback" class="tsd-kind-icon">remove<wbr>Callback</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_rmicontext_.rmicontext.html#removemessagecallback" class="tsd-kind-icon">remove<wbr>Message<wbr>Callback</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-protected">
 					<a name="constructor" class="tsd-anchor"></a>
-					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new RMIClient<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../modules/_index_.html#clientoptions" class="tsd-signature-type">ClientOptions</a>, connection<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">WebSocket</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_rmiclient_.rmiclient.html" class="tsd-signature-type">RMIClient</a></li>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">new RMIContext<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_rmicontext_.rmicontext.html" class="tsd-signature-type">RMIContext</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="_rmicontext_.rmicontext.html">RMIContext</a>.<a href="_rmicontext_.rmicontext.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIClient.ts#L8">RMIClient.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIContext.ts#L9">RMIContext.ts:9</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../modules/_index_.html#clientoptions" class="tsd-signature-type">ClientOptions</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> connection: <span class="tsd-signature-type">WebSocket</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_rmiclient_.rmiclient.html" class="tsd-signature-type">RMIClient</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_rmicontext_.rmicontext.html" class="tsd-signature-type">RMIContext</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -149,41 +146,20 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_isconnected" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _is<wbr>Connected</h3>
-					<div class="tsd-signature tsd-kind-icon">_is<wbr>Connected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="_messagehandlers" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _message<wbr>Handlers</h3>
+					<div class="tsd-signature tsd-kind-icon">_message<wbr>Handlers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIClient.ts#L7">RMIClient.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIContext.ts#L9">RMIContext.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="connection" class="tsd-anchor"></a>
-					<h3>connection</h3>
-					<div class="tsd-signature tsd-kind-icon">connection<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WebSocket</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIClient.ts#L5">RMIClient.ts:5</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="handlers" class="tsd-anchor"></a>
-					<h3>handlers</h3>
-					<div class="tsd-signature tsd-kind-icon">handlers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIClient.ts#L8">RMIClient.ts:8</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="methodhandlers" class="tsd-anchor"></a>
 					<h3>method<wbr>Handlers</h3>
 					<div class="tsd-signature tsd-kind-icon">method<wbr>Handlers<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_index_.methodhandlers.html" class="tsd-signature-type">MethodHandlers</a></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="_rmicontext_.rmicontext.html">RMIContext</a>.<a href="_rmicontext_.rmicontext.html#methodhandlers">methodHandlers</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIContext.ts#L8">RMIContext.ts:8</a></li>
 						</ul>
@@ -192,31 +168,37 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="addmethodhandlers" class="tsd-anchor"></a>
 					<h3>add<wbr>Method<wbr>Handlers</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Method<wbr>Handlers<span class="tsd-signature-symbol">(</span>methodHandlers<span class="tsd-signature-symbol">: </span><a href="../interfaces/_index_.methodhandlers.html" class="tsd-signature-type">MethodHandlers</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Method<wbr>Handlers<span class="tsd-signature-symbol">(</span>connection<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WebSocket</span>, methodHandlers<span class="tsd-signature-symbol">: </span><a href="../interfaces/_index_.methodhandlers.html" class="tsd-signature-type">MethodHandlers</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="_rmicontext_.rmicontext.html">RMIContext</a>.<a href="_rmicontext_.rmicontext.html#addmethodhandlers">addMethodHandlers</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIClient.ts#L31">RMIClient.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIContext.ts#L21">RMIContext.ts:21</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Calls <a href="_rmicontext_.rmicontext.html#addmethodhandlers">RMIContext.addMethodHandlers</a> to set methodHandlers as the instance to invoke upon receiving
-									a request to call a method</p>
+									<p>Adds a MethodHandlers instance to this instance&#39;s inner reference. It will then be called via a function name
+									call.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
+									<h5>connection: <span class="tsd-signature-type">WebSocket</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The connection to add this methodHandler to</p>
+									</div>
+								</li>
+								<li>
 									<h5>methodHandlers: <a href="../interfaces/_index_.methodhandlers.html" class="tsd-signature-type">MethodHandlers</a></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>The method handlers to add</p>
 									</div>
 								</li>
 							</ul>
@@ -224,76 +206,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-					<a name="addremotemethods" class="tsd-anchor"></a>
-					<h3>add<wbr>Remote<wbr>Methods</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Remote<wbr>Methods&lt;T&gt;<span class="tsd-signature-symbol">(</span>remoteMethods<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> &amp; </span><a href="_rmiclient_.rmiclient.html" class="tsd-signature-type">RMIClient</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIClient.ts#L46">RMIClient.ts:46</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-type-parameters-title">Type parameters</h4>
-							<ul class="tsd-type-parameters">
-								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="../interfaces/_index_.remotemethods.html" class="tsd-signature-type">RemoteMethods</a></h4>
-								</li>
-							</ul>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>remoteMethods: <span class="tsd-signature-type">T</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> &amp; </span><a href="_rmiclient_.rmiclient.html" class="tsd-signature-type">RMIClient</a><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="getargs" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> get<wbr>Args</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Args<span class="tsd-signature-symbol">(</span>func<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIClient.ts#L42">RMIClient.ts:42</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns arguments from a function string in the format [arg1, arg2, arg3...]
-									TODO: Doesn&#39;t account for newline and comment shenanigans</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>func: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="invokecallbacks" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> invoke<wbr>Callbacks</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">invoke<wbr>Callbacks<span class="tsd-signature-symbol">(</span>callbacks<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">[]</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_rmicontext_.rmicontext.html">RMIContext</a>.<a href="_rmicontext_.rmicontext.html#invokecallbacks">invokeCallbacks</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIContext.ts#L63">RMIContext.ts:63</a></li>
 								</ul>
@@ -311,16 +232,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="onmessage" class="tsd-anchor"></a>
 					<h3>on<wbr>Message</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">on<wbr>Message<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_rmicontext_.rmicontext.html">RMIContext</a>.<a href="_rmicontext_.rmicontext.html#onmessage">onMessage</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIContext.ts#L51">RMIContext.ts:51</a></li>
 								</ul>
@@ -353,16 +273,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="removecallback" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> remove<wbr>Callback</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">remove<wbr>Callback<span class="tsd-signature-symbol">(</span>handlers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">[]</span>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_rmicontext_.rmicontext.html">RMIContext</a>.<a href="_rmicontext_.rmicontext.html#removecallback">removeCallback</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIContext.ts#L59">RMIContext.ts:59</a></li>
 								</ul>
@@ -380,16 +299,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="removemessagecallback" class="tsd-anchor"></a>
 					<h3>remove<wbr>Message<wbr>Callback</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">remove<wbr>Message<wbr>Callback<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_rmicontext_.rmicontext.html">RMIContext</a>.<a href="_rmicontext_.rmicontext.html#removemessagecallback">removeMessageCallback</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/bigbeno37/ws-rmi/blob/f671522/src/RMIContext.ts#L55">RMIContext.ts:55</a></li>
 								</ul>
@@ -430,10 +348,10 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_rmiclient_.html">"RMIClient"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_rmicontext_.html">"RMIContext"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -449,43 +367,31 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_rmiclient_.rmiclient.html" class="tsd-kind-icon">RMIClient</a>
+						<a href="_rmicontext_.rmicontext.html" class="tsd-kind-icon">RMIContext</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-								<a href="_rmiclient_.rmiclient.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-protected">
+								<a href="_rmicontext_.rmicontext.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="_rmiclient_.rmiclient.html#_isconnected" class="tsd-kind-icon">_is<wbr>Connected</a>
+								<a href="_rmicontext_.rmicontext.html#_messagehandlers" class="tsd-kind-icon">_message<wbr>Handlers</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_rmiclient_.rmiclient.html#connection" class="tsd-kind-icon">connection</a>
+								<a href="_rmicontext_.rmicontext.html#methodhandlers" class="tsd-kind-icon">method<wbr>Handlers</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_rmiclient_.rmiclient.html#handlers" class="tsd-kind-icon">handlers</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_rmicontext_.rmicontext.html#addmethodhandlers" class="tsd-kind-icon">add<wbr>Method<wbr>Handlers</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="_rmiclient_.rmiclient.html#methodhandlers" class="tsd-kind-icon">method<wbr>Handlers</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="_rmicontext_.rmicontext.html#invokecallbacks" class="tsd-kind-icon">invoke<wbr>Callbacks</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="_rmiclient_.rmiclient.html#addmethodhandlers" class="tsd-kind-icon">add<wbr>Method<wbr>Handlers</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_rmicontext_.rmicontext.html#onmessage" class="tsd-kind-icon">on<wbr>Message</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-								<a href="_rmiclient_.rmiclient.html#addremotemethods" class="tsd-kind-icon">add<wbr>Remote<wbr>Methods</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="_rmicontext_.rmicontext.html#removecallback" class="tsd-kind-icon">remove<wbr>Callback</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="_rmiclient_.rmiclient.html#getargs" class="tsd-kind-icon">get<wbr>Args</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_rmiclient_.rmiclient.html#invokecallbacks" class="tsd-kind-icon">invoke<wbr>Callbacks</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_rmiclient_.rmiclient.html#onmessage" class="tsd-kind-icon">on<wbr>Message</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_rmiclient_.rmiclient.html#removecallback" class="tsd-kind-icon">remove<wbr>Callback</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_rmiclient_.rmiclient.html#removemessagecallback" class="tsd-kind-icon">remove<wbr>Message<wbr>Callback</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_rmicontext_.rmicontext.html#removemessagecallback" class="tsd-kind-icon">remove<wbr>Message<wbr>Callback</a>
 							</li>
 						</ul>
 					</li>

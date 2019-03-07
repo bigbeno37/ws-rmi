@@ -1,11 +1,37 @@
-import WebSocket from 'ws';
-import {RemoteMethods} from "./index";
+import {ClientOptions, MethodHandlers, RemoteMethods} from "./index";
+import {RMIContext} from "./RMIContext";
 
-export class RMIClient {
+export class RMIClient extends RMIContext {
 	public connection: WebSocket;
 
-	constructor(connection?: WebSocket) {
-		this.connection = connection || new WebSocket('ws://localhost:3001/');
+	private readonly _isConnected: Promise<void>;
+	handlers: Map<string, Function>;
+
+	constructor(options?: ClientOptions, connection?: WebSocket) {
+		super();
+		let port = 3001;
+
+		if (options && options.port) {
+			port = options.port;
+		}
+
+		this.connection = connection || new WebSocket(`ws://localhost:${port}/`);
+
+		// If this connection isn't OPEN, create a new promise that resolves when it becomes open
+		if (this.connection.readyState !== 1) {
+			this._isConnected = new Promise(resolve => this.connection.addEventListener("open", () => resolve()));
+		}
+	}
+
+	/**
+	 * Calls [[RMIContext.addMethodHandlers]] to set methodHandlers as the instance to invoke upon receiving
+	 * a request to call a method
+	 * @param methodHandlers
+	 */
+	addMethodHandlers(methodHandlers: MethodHandlers) {
+		super.addMethodHandlers(this.connection, methodHandlers);
+
+		return this;
 	}
 
 	/**
@@ -17,9 +43,15 @@ export class RMIClient {
 		return func.replace(' ', '').split('(')[1].split(')')[0].split(',');
 	}
 
-	addRemoteMethods<T extends RemoteMethods>(remoteMethods: T): T&RMIClient {
+	async addRemoteMethods<T extends RemoteMethods>(remoteMethods: T): Promise<T&RMIClient>{
+		// If this isn't an open connection, wait for it to be one
+		if (this._isConnected) {
+			await this._isConnected;
+		}
+
 		// TODO: Add options to configure websocket connection url
 		remoteMethods.connection = this.connection;
+		remoteMethods.handlers = this.handlers;
 
 		for (const value of Object.getOwnPropertyNames(Object.getPrototypeOf(remoteMethods))) {
 			if (value === 'constructor') continue;
@@ -28,23 +60,36 @@ export class RMIClient {
 			let uniqueFunction: Function = remoteMethods[value];
 			const args = this.getArgs(uniqueFunction.toString());
 
-
 			// Incredible amounts of jankery below, I'm sorry if there are bugs
 			const newFunctionBody =
-				`this.connection.send(\`${uniqueFunction.name} \$\{JSON.stringify([${args}])\}\`);
+				`console.log(\`Sending call ${uniqueFunction.name} \$\{JSON.stringify([${args}])\} to server!\`);
+				this.connection.send(\`call ${uniqueFunction.name} \$\{JSON.stringify([${args}])\}\`);
 	
 				return new Promise(resolve => {				
-					const listener = message => {
-						console.log(\`Server said \$\{message\}\`);
+					const listener = ({data}) => {						
+						// This can't be our message if:
+						// It doesn't have any spaces
+						if (!data.includes(' ')) return;
+						
+						// When split it doesn't consist of return (funcName) (returnValue)
+						if (data.split(' ').length < 3) return;
+						
+						// If the first parameter isn't return
+						if (data.split(' ')[0] != 'return') return;
 					
-						if (message.split(' ')[0] === '${uniqueFunction.name}') {						
-							this.connection.removeListener('message', listener);
+						// And definitely if the second parameter is for a separate function (maybe our function
+						// just takes a while to return
+						
+						// If the message, however, does follow all these rules, resolve this promise
+						if (data.split(' ')[1] === '${uniqueFunction.name}') {
+							console.log(\`Server sent \${data} to client!\`);
+							this.connection.removeEventListener('message', listener);
 	
-							resolve( JSON.parse( message.split(' ').splice(1).join(' ') ) );
+							resolve( JSON.parse( data.split(' ').splice(2).join(' ') ) );
 						}
 					};
 						
-					this.connection.on('message', listener);
+					this.connection.addEventListener('message', listener);
 				});`;
 
 			remoteMethods[value] = Function(...args, newFunctionBody);
@@ -57,9 +102,5 @@ export class RMIClient {
 		}
 
 		return remoteMethods as T&RMIClient;
-	}
-
-	async isConnected() {
-		return new Promise(resolve => this.connection.on('open', () => resolve()));
 	}
 }
