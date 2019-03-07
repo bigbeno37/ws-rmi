@@ -1,7 +1,16 @@
 import {RMIServer} from "../src/RMIServer";
 import {MethodHandlers, RMIClient} from "../src";
+import WebSocket from 'ws';
+import {RemoteMethods} from "../index";
 
 class ServerHandlers implements MethodHandlers {
+	private _messages: string[];
+
+	constructor() {
+		this._messages = [];
+		console.log();
+	}
+
 	calculateSum(num1: number, num2: number): number {
 		return num1+num2;
 	}
@@ -11,21 +20,38 @@ class ServerHandlers implements MethodHandlers {
 	}
 
 	say(message: string): void {
-		console.log(message);
+		this._messages.push(message);
+	}
+
+	getAllMessages(): string[] {
+		return this._messages;
 	}
 }
 
+class RemoteServerMethods implements RemoteMethods {
+	// @ts-ignore
+	calculateSum(num1: number, num2: number): number {}
+
+	// @ts-ignore
+	createArray(arg1: string, arg2: string): string[] {}
+
+	say(message: string): void {}
+
+	// @ts-ignore
+	getAllMessages(): string[] {}
+}
+
 let server: RMIServer;
-let remote: ServerHandlers&RMIClient;
+let remote: RemoteServerMethods&RMIClient;
 
 describe('E2E', () => {
 	beforeAll(() => {
-		server = new RMIServer(new ServerHandlers());
+		(global as any).WebSocket = WebSocket;
+		server = new RMIServer().addMethodHandlers(new ServerHandlers());
 	});
 
 	beforeEach(async () => {
-		remote = new RMIClient().addRemoteMethods(new ServerHandlers());
-		await remote.isConnected();
+		remote = await new RMIClient().addRemoteMethods(new RemoteServerMethods());
 	});
 
 	it('returns the correct sum of 1 and 2', async () => {
@@ -42,9 +68,12 @@ describe('E2E', () => {
 		expect(array[1]).toBe('World!');
 	});
 
-	it('handles void returns', async () => {
-		const response = await remote.say('Hello, world!');
+	it('handles instance fields', async () => {
+		expect(await remote.getAllMessages()).toHaveLength(0);
 
-		expect(response).toBeNull();
+		await remote.say('Hello, world!');
+
+		expect(await remote.getAllMessages()).toHaveLength(1);
+		expect((await remote.getAllMessages())[0]).toBe('Hello, world!');
 	});
 });

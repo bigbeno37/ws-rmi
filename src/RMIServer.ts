@@ -1,52 +1,62 @@
 import express from 'express';
 import expressWs, {Application} from 'express-ws';
-import {MethodHandlers} from "./index";
+import {MethodHandlers, ServerOptions} from "./index";
+import {RMIContext} from "./RMIContext";
 
-export class RMIServer {
+export class RMIServer extends RMIContext {
 	private readonly _server: Application;
-	private _handlers: Map<string, Function>;
+	private _newConnectionHandlers: ((connection: WebSocket) => void)[];
+	private _clientDisconnectHandlers: ((connection: WebSocket) => void)[];
 
 	/**
 	 * Starts up an express server with WS support on port 3001
 	 */
-	constructor(methodHandlers: MethodHandlers, server?: Application) {
+	constructor(options?: ServerOptions, server?: Application) {
+		super();
+		this._newConnectionHandlers = [];
+		this._clientDisconnectHandlers = [];
+
 		this._server = server || expressWs(express()).app;
 
 		this._server.ws('/', connection => {
 			console.log('New connection!');
+			this.invokeCallbacks(this._newConnectionHandlers, connection);
 
-			connection.on('message', (message: string) => {
-				console.log(`Client said ${message}`);
+			super.addMethodHandlers(connection as any, this.methodHandlers);
 
-				const functionName = message.split(' ')[0];
-				const args = JSON.parse(message.split(' ').splice(1).join(' '));
-
-				const handler = this._handlers.get(functionName);
-				if (handler) {
-					let result = handler(...args);
-
-					if (result === undefined) result = null;
-
-					connection.send(`${functionName} ${JSON.stringify(result)}`);
-				}
-			});
+			connection.addEventListener('close', (event) => this.invokeCallbacks(this._clientDisconnectHandlers, event.target));
 		});
 
-		this._server.listen(3001);
+		let port = 3001;
 
-		// -----------------------
-
-		this._handlers = new Map();
-
-		for (const value of Object.getOwnPropertyNames(Object.getPrototypeOf(methodHandlers))) {
-			if (value === 'constructor') continue;
-
-			const uniqueFunction: Function = methodHandlers[value];
-			this._handlers.set(uniqueFunction.name, uniqueFunction);
+		if (options && options.port) {
+			port = options.port;
 		}
+
+		this._server.listen(port);
+		console.log(`Server listening on port ${port}!`)
 	}
 
-	get handlers() {
-		return this._handlers;
+	addMethodHandlers(methodHandlers: MethodHandlers): this {
+		this.methodHandlers = methodHandlers;
+
+		return this;
+	}
+
+	// Event callbacks
+	onNewConnection(callback: (connection: WebSocket) => void) {
+		this._newConnectionHandlers.push(callback);
+	}
+
+	removeNewConnectionCallback(callback: (connection: WebSocket) => void) {
+		this._newConnectionHandlers = this.removeCallback(this._newConnectionHandlers, callback);
+	}
+
+	onClientDisconnect(callback: (connection: WebSocket) => void) {
+		this._clientDisconnectHandlers.push(callback);
+	}
+
+	removeClientDisconnectCallback(callback: (connection: WebSocket) => void) {
+		this._clientDisconnectHandlers = this.removeCallback(this._clientDisconnectHandlers, callback);
 	}
 }

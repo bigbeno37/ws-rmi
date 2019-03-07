@@ -25,26 +25,28 @@ describe('RMIServer', () => {
 		server.ws = jest.fn((url: string, handler: (connection: WebSocket) => void) => connectClient = handler);
 		server.listen = jest.fn();
 
-		serverRmi = new RMIServer(new ServerHandlers(), server);
+		serverRmi = new RMIServer({}, server).addMethodHandlers(new ServerHandlers());
+		serverRmi.onNewConnection = jest.fn();
 	});
 
 	beforeEach(() => {
 		ws = jest.fn();
-		ws.on = jest.fn((type: string, handler: (message: string) => void) => sendMessageToServer = handler);
+		ws.addEventListener = jest.fn((type: string, handler: (message: string) => void) => sendMessageToServer = handler);
 		ws.send = jest.fn();
-	});
-
-	it('sets the handlers correctly', () => {
-		expect(serverRmi.handlers.has('calculateSum')).toBeTruthy();
-		expect(serverRmi.handlers.has('createArray')).toBeTruthy();
 	});
 
 	it('returns the correct value when calculateSum is called', () => {
 		expect(ws.send).not.toHaveBeenCalled();
 
 		connectClient(ws);
-		sendMessageToServer('calculateSum [1,2]');
+		sendMessageToServer('call calculateSum [1,2]');
 
-		expect(ws.send).toHaveBeenCalledWith('calculateSum 3');
+		expect(ws.send).toHaveBeenCalledWith('return calculateSum 3');
+	});
+
+	it('calls the onNewConnection callback when a new connection is created', () => {
+		connectClient(ws);
+
+		expect(serverRmi.onNewConnection).toHaveBeenCalledWith(ws);
 	});
 });
