@@ -1,18 +1,8 @@
 import {v4 as uuid} from "uuid";
 import {WebSocketServer} from "ws";
-
-type JSON = string | number | boolean | null | JSON[] | { [key: string | number]: JSON };
-
-type RMIRequest = {
-    id: string,
-    target: string,
-    args: JSON[]
-};
-
-type RMIResult = {
-    id: string,
-    result: JSON
-};
+import {JSON} from "./types/JSON";
+import {RMIRequest} from "./types/RMIRequest";
+import {RMIResult} from "./types/RMIResult";
 
 export const getRemote = <T extends object>(ws: WebSocket): T => {
     if (ws.readyState !== 1) throw new Error(`Attempted to create remote RMI instance, but the given WebSocket 
