@@ -1,25 +1,37 @@
-import {RMIClient} from "./RMIClient";
+import {v4 as uuid} from "uuid";
+import {WebSocketServer} from "ws";
 
-export {RMIClient};
+export const getRemote = <T extends object>(ws: WebSocket): T => {
+    if (ws.readyState !== 1) throw new Error(`Attempted to create remote RMI instance, but the given WebSocket 
+        connection was not open. Ready state is ${ws.readyState}`);
 
-// If this is a NodeJS environment without a window, RMIServer is usable
-if (typeof window === 'undefined') {
-	const {RMIServer} = require('./RMIServer');
-	exports.RMIServer = RMIServer;
-}
+    return new Proxy({}, {
+        get: (target, property) => {
+            return new Proxy(() => {}, {
+                apply: (target, thisArg, args) => {
+                    const id = uuid();
 
-export type ClientOptions = {
-	port?: number
-}
+                    const listener = ({data}: MessageEvent) => {
+                        console.log(`received ${data}`);
+                        ws.removeEventListener("message", listener);
+                    };
 
-export type ServerOptions = {
-	port?: number
-}
+                    ws.addEventListener("message", listener);
+                    ws.send(JSON.stringify({ id, target: property, args }));
+                }
+            });
+        }
+    }) as T;
+};
 
-export interface RemoteMethods {
-	[index: string]: any
-}
+export const exposeFunctions = (wss: WebSocketServer, functions: object) => {
+    wss.on("connection", ws => {
+        ws.on("message", async (data: string) => {
+            const request = JSON.parse(data) as { id: string, target: string, args: any };
 
-export interface MethodHandlers extends RemoteMethods {
-	[index: string]: any
-}
+            const result = await (functions as any)[request.target]();
+
+            ws.send(JSON.stringify({ id: request.id, target: request.target, result }));
+        });
+    });
+};

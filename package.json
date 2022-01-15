@@ -1,20 +1,9 @@
 {
   "name": "ws-rmi",
-  "version": "0.3.6",
-  "description": "RMI in Javascript through native WebSocket",
-  "files": [
-    "/dist",
-    "index.d.ts"
-  ],
-  "main": "dist/index.js",
-  "types": "./index.d.ts",
-  "watch": {
-    "build": "{src,tests}/**/*.ts"
-  },
+  "version": "1.0.0",
+  "description": "A Remote Method Invocation implementation written in JavaScript utilising the WebSocket protocol",
+  "main": "index.js",
   "scripts": {
-    "build:docs": "typedoc src/ --out docs/ --mode modules --exclude *.test.ts --module commonjs --target ES6 && echo > docs/.nojekyll",
-    "build": "tsc && npm run build:docs",
-    "watch": "npm-watch",
     "test": "jest"
   },
   "repository": {
@@ -22,35 +11,27 @@
     "url": "git+https://github.com/bigbeno37/ws-rmi.git"
   },
   "keywords": [
-    "WebSocket",
-    "ws",
-    "RMI",
+    "rmi",
     "remote",
     "method",
     "invocation",
-    "native",
-    "typescript"
+    "server",
+    "client",
+    "websocket",
+    "ws"
   ],
   "author": "bigbeno37",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/bigbeno37/ws-rmi/issues"
   },
   "homepage": "https://github.com/bigbeno37/ws-rmi#readme",
-  "devDependencies": {
-    "@types/express": "^4.16.1",
-    "@types/express-ws": "^3.0.0",
-    "@types/jest": "^24.0.5",
-    "@types/ws": "^6.0.1",
-    "jest": "^23.6.0",
-    "ts-jest": "^23.10.5",
-    "typedoc": "^0.14.2",
-    "typescript": "^3.3.3"
-  },
   "dependencies": {
-    "express": "^4.16.4",
-    "express-ws": "^4.0.0",
-    "npm-watch": "^0.6.0",
-    "ws": "^6.1.3"
+    "@types/uuid": "^8.3.4",
+    "@types/ws": "^8.2.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4",
+    "uuid": "^8.3.2",
+    "ws": "^8.4.2"
   }
 }
