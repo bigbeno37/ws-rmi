@@ -1,14 +1,14 @@
 import { WebSocketServer } from "ws";
-import {exposeFunctions} from "../src";
 import {Server} from "./Types";
-
-const wss = new WebSocketServer({ port: 8080 });
+import {exposeFunctions} from "../src";
 
 class ServerImpl implements Server {
     async add(x: number, y: number): Promise<number> {
         throw new Error("Whoops! Server error...");
     }
 }
+
+const wss = new WebSocketServer({ port: 8080 });
 
 wss.on("listening", () => {
     console.log("Server listening on port 8080...");

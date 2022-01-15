@@ -1,4 +1,4 @@
-import {getRemote} from "../src";
+import {createRMIClient} from "../src";
 import {Server} from "./Types";
 import WebSocket from "ws";
 
@@ -8,7 +8,7 @@ ws.addEventListener("open", async () => {
     // a ws "WebSocket" is missing a few items from a regular browser WebSocket, but it is not used, hence
     // the ignore statement.
     // @ts-ignore
-    const server = getRemote<Server>(ws);
+    const server = createRMIClient<Server>(ws);
 
     try {
         console.log(`1+1 is ${await server.add(1, 1)}`);
