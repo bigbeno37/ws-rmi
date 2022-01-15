@@ -10,7 +10,11 @@ ws.addEventListener("open", async () => {
     // @ts-ignore
     const server = getRemote<Server>(ws);
 
-    console.log(`1+1 is ${await server.add(1, 1)}`);
+    try {
+        console.log(`1+1 is ${await server.add(1, 1)}`);
+    } catch (e) {
+        console.log("Server side error occurred.\n", e);
+    }
     ws.close();
 });
 

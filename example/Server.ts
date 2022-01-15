@@ -6,7 +6,7 @@ const wss = new WebSocketServer({ port: 8080 });
 
 class ServerImpl implements Server {
     async add(x: number, y: number): Promise<number> {
-        return x + y;
+        throw new Error("Whoops! Server error...");
     }
 }
 
