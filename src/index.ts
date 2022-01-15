@@ -29,7 +29,7 @@ export const exposeFunctions = (wss: WebSocketServer, functions: object) => {
         ws.on("message", async (data: string) => {
             const request = JSON.parse(data) as { id: string, target: string, args: any };
 
-            const result = await (functions as any)[request.target]();
+            const result = await (functions as any)[request.target](...request.args);
 
             ws.send(JSON.stringify({ id: request.id, target: request.target, result }));
         });
