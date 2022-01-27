@@ -1,6 +1,6 @@
 import { WebSocketServer } from "ws";
 import {Server} from "./Types";
-import {exposeFunctions} from "../src";
+import {RMIManager} from "../src/RMIManager";
 
 class ServerImpl implements Server {
 	async add(x: number, y: number): Promise<number> {
@@ -13,5 +13,12 @@ const wss = new WebSocketServer({ port: 8080 });
 wss.on("listening", () => {
 	console.log("Server listening on port 8080...");
 
-	exposeFunctions(wss, new ServerImpl());
+	wss.on("connection", ws => {
+		console.log("Client connected! Establishing RMI...");
+
+		const rmi = new RMIManager(ws as unknown as WebSocket);
+		rmi.exposeFunctions(new ServerImpl());
+
+		console.log("Done!");
+	});
 });

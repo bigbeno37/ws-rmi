@@ -5,3 +5,5 @@
  * @param condition2 The second condition.
  */
 export const xor = (condition1: boolean, condition2: boolean) => !condition1 !== !condition2;
+
+export const isEqualToAny = <T>(obj: T, ...compareTo: T[]) => compareTo.some(item => obj === item);

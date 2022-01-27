@@ -3,6 +3,8 @@ import {validateRMIRemoteResponse} from "./types/RMIRemoteResponse";
 import {hasPropertyOfType, isObject} from "./JSONValidation";
 import {createRMIRequest} from "./types/RMIRequest";
 import { pino } from "pino";
+import {isEqualToAny} from "./Utils";
+import {RMIMessageType} from "./types/RMIMessage";
 
 const log = pino();
 
@@ -51,6 +53,10 @@ export const createRMIClient = <T extends object>(ws: WebSocket): T => {
 						}
 
 						const { rmi } = response;
+
+						if (!isEqualToAny<RMIMessageType>(rmi.type, "RESPONSE_RESULT", "RESPONSE_ERROR")) {
+							return;
+						}
 
 						if (rmi.id !== id) {
 							listenerLog.debug(`Current handler with ID ${id} is skipping response with ID ${rmi.id}`);

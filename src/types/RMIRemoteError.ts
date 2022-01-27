@@ -11,7 +11,7 @@ export type RMIRemoteErrorData = {
 /**
  * Represents an error that occurred during invocation of an exposed RMI function.
  */
-export type RMIRemoteError = RMIMessage<RMIRemoteErrorData>;
+export type RMIRemoteError = RMIMessage<"RESPONSE_ERROR", RMIRemoteErrorData>;
 
 /**
  * Creates an object adhering to the RMI Remote Error schema.
@@ -20,7 +20,7 @@ export type RMIRemoteError = RMIMessage<RMIRemoteErrorData>;
  * @param error The error that occurred on the remote. NOTE: This should be generic to avoid clients obtaining
  *              potentially sensitive information about the remote, such as stack trace, etc.
  */
-export const createRMIRemoteError = (id: string, error: string) => createRMIMessage(id, { error });
+export const createRMIRemoteError = (id: string, error: string): RMIRemoteError => createRMIMessage(id, "RESPONSE_ERROR", { error });
 
 /**
  * Validates that the given message is an RMI remote error.

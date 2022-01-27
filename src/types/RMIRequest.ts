@@ -19,7 +19,7 @@ type RMIRequestData = {
 /**
  * Represents a request to the remote to invoke a function.
  */
-export type RMIRequest = RMIMessage<RMIRequestData>;
+export type RMIRequest = RMIMessage<"REQUEST", RMIRequestData>;
 
 /**
  * Creates an object adhering to the RMI Request schema.
@@ -28,7 +28,8 @@ export type RMIRequest = RMIMessage<RMIRequestData>;
  * @param target The target function to be invoked.
  * @param args The function arguments to be invoked in the remote.
  */
-export const createRMIRequest = (id: string, target: string, args: unknown[]) => createRMIMessage(id, { target, args });
+export const createRMIRequest = (id: string, target: string, args: unknown[]): RMIRequest =>
+	createRMIMessage(id, "REQUEST", { target, args });
 
 /**
  * Validates that the given message is an RMI Request.
