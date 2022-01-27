@@ -38,7 +38,7 @@ export class RMIManager {
 	/**
 	 * Constructs a new manager instance.
 	 *
-	 * @param ws The WebSocket connectio nto use to perform RMI tasks. NOTE: This should be an active connection!
+	 * @param ws The WebSocket connection to use to perform RMI tasks. NOTE: This should be an active connection!
 	 * @param config Configuration to be applied.
 	 */
 	constructor(ws: WebSocket, config: RMIManagerConfig = { logger: ConsoleLogger }) {
