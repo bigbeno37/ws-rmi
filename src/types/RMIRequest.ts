@@ -1,9 +1,9 @@
+import {createRMIMessage, createRMIMessageValidator, RMIMessage} from "./RMIMessage";
+import {hasPropertyOfType, isArray, isObject, isString} from "../JSONValidation";
+
 /**
  * Represents a request made to a remote RMI server.
  */
-import {createRMIMessageValidator, RMIMessage, serialiseRMIMessage} from "./RMIMessage";
-import {hasPropertyOfType, isArray, isObject, isString} from "../JSONValidation";
-
 type RMIRequestData = {
     /**
      * The name of the function that will be invoked on the remote RMI server.
@@ -16,14 +16,23 @@ type RMIRequestData = {
     args: unknown[]
 };
 
+/**
+ * Represents a request to the remote to invoke a function.
+ */
 export type RMIRequest = RMIMessage<RMIRequestData>;
 
-export const serialiseRMIRequest = (id: string, target: string, args: unknown[]) =>
-	serialiseRMIMessage<RMIRequestData>(id, {
-		target,
-		args
-	});
+/**
+ * Creates an object adhering to the RMI Request schema.
+ *
+ * @param id The ID to uniquely identify the RMI Result that the remote sends back.
+ * @param target The target function to be invoked.
+ * @param args The function arguments to be invoked in the remote.
+ */
+export const createRMIRequest = (id: string, target: string, args: unknown[]) => createRMIMessage(id, { target, args });
 
+/**
+ * Validates that the given message is an RMI Request.
+ */
 export const validateRMIRequest = createRMIMessageValidator((data): data is RMIRequestData =>
 	isObject(data) && hasPropertyOfType(data, "target", isString) && hasPropertyOfType(data, "args", isArray)
 );

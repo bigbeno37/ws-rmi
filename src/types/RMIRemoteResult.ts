@@ -13,8 +13,17 @@ export type RMIRemoteResultData = {
  */
 export type RMIRemoteResult = RMIMessage<RMIRemoteResultData>;
 
+/**
+ * Creates an object adhering to the RMI Remote Result schema.
+ *
+ * @param id The ID of the request that was used from the client.
+ * @param result The result of the function invocation.
+ */
 export const createRMIRemoteResult = (id: string, result: unknown) => createRMIMessage(id, { result });
 
+/**
+ * Validates that the given message is an RMI Remote Result.
+ */
 export const validateRMIRemoteResult = createRMIMessageValidator((data): data is RMIRemoteResultData =>
 	isObject(data) && hasProperty(data, "result")
 );

@@ -1,7 +1,7 @@
 import {v4 as uuid} from "uuid";
 import {validateRMIRemoteResponse} from "./types/RMIRemoteResponse";
 import {hasPropertyOfType, isObject} from "./JSONValidation";
-import {serialiseRMIRequest} from "./types/RMIRequest";
+import {createRMIRequest} from "./types/RMIRequest";
 
 /**
  * Creates an RMI client that, when functions are called, will automatically message the server the given WebSocket
@@ -32,9 +32,7 @@ export const createRMIClient = <T extends object>(ws: WebSocket): T => {
 							return;
 						}
 
-						console.log("validating response...");
 						if (!validateRMIRemoteResponse(response)) {
-							console.log("response was not valid");
 							if (isObject(response) && hasPropertyOfType(response, "rmi", isObject)) {
 								console.warn("Received an invalid RMI message! Message was\n", data);
 							}
@@ -57,8 +55,7 @@ export const createRMIClient = <T extends object>(ws: WebSocket): T => {
 
 					ws.addEventListener("message", listener);
 
-					const request = serialiseRMIRequest(id, property, args);
-					ws.send(request);
+					ws.send(JSON.stringify(createRMIRequest(id, property, args)));
 				})
 			});
 		}
