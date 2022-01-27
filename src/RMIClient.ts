@@ -21,62 +21,50 @@ export const createRMIClient = <T extends object>(ws: WebSocket): T => {
 	if (ws.readyState !== 1) throw new Error(`Attempted to create remote RMI instance, but the given WebSocket 
         connection was not open. Ready state is ${ws.readyState}`);
 
+	const activeRequests = new Map<string, { resolve: (value: unknown) => void, reject: (reason: unknown) => void }>();
+
+	ws.addEventListener("message", ({ data }: MessageEvent<string>) => {
+		if (typeof data !== "string") return;
+
+		let response: unknown;
+		try {
+			response = JSON.parse(data);
+		} catch (e) {
+			return;
+		}
+
+		if (!validateRMIRemoteResponse(response)) {
+			return;
+		}
+
+		const { rmi } = response;
+
+		if (!isEqualToAny<RMIMessageType>(rmi.type, "RESPONSE_RESULT", "RESPONSE_ERROR")) {
+			return;
+		}
+
+		const activeRequest = activeRequests.get(rmi.id);
+		if (activeRequest === undefined) {
+			return;
+		}
+
+		const { resolve, reject } = activeRequest;
+
+		activeRequests.delete(rmi.id);
+
+		if ("error" in rmi.data) {
+			reject(rmi.data.error);
+		} else {
+			resolve(rmi.data.result);
+		}
+	});
+
 	return new Proxy({}, {
 		get: (target, property: string) => {
 			return new Proxy(() => { /**/ }, {
 				apply: (target, thisArg, args) => new Promise((resolve, reject) => {
 					const id = uuid();
-
-					const listenerLog = pino({ name: id });
-					const listener = ({data}: MessageEvent) => {
-						listenerLog.debug(`Received message from remote: "${data}"`);
-
-						if (typeof data !== "string") return;
-
-						let response: unknown;
-						try {
-							response = JSON.parse(data);
-						} catch (e) {
-							listenerLog.debug(`Message from remote was not valid JSON! Cause: "${e}"`);
-
-							return;
-						}
-
-						listenerLog.debug(`Message was valid JSON! Parsed as:\n${response}`);
-
-						if (!validateRMIRemoteResponse(response)) {
-							if (isObject(response) && hasPropertyOfType(response, "rmi", isObject)) {
-								listenerLog.warn("Received an invalid RMI message! Message was\n", data);
-							}
-
-							return;
-						}
-
-						const { rmi } = response;
-
-						if (!isEqualToAny<RMIMessageType>(rmi.type, "RESPONSE_RESULT", "RESPONSE_ERROR")) {
-							return;
-						}
-
-						if (rmi.id !== id) {
-							listenerLog.debug(`Current handler with ID ${id} is skipping response with ID ${rmi.id}`);
-							return;
-						}
-
-						listenerLog.info(`Received valid remote response! Interpreted as: ${response}`);
-						listenerLog.debug("Removing current handler as a WebSocket listener...");
-						ws.removeEventListener("message", listener);
-
-						if ("error" in rmi.data) {
-							listenerLog.info(`There was an error from the remote!\n${rmi.data.error}`);
-							reject(rmi.data.error);
-						} else {
-							listenerLog.info(`Remote function invocation completed successfully! Result was:\n${rmi.data.result}`);
-							resolve(rmi.data.result);
-						}
-					};
-
-					ws.addEventListener("message", listener);
+					activeRequests.set(id, { resolve, reject });
 
 					const request = JSON.stringify(createRMIRequest(id, property, args));
 
