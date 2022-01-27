@@ -4,7 +4,7 @@ import {exposeFunctions} from "../src";
 
 class ServerImpl implements Server {
     async add(x: number, y: number): Promise<number> {
-        throw new Error("Whoops! Server error...");
+        return x + y;
     }
 }
 

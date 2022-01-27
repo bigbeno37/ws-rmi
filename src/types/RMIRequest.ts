@@ -1,15 +1,10 @@
-import {JSON} from "./JSON";
-
 /**
  * Represents a request made to a remote RMI server.
  */
-export type RMIRequest = {
-    /**
-     * The UUID of the request. This is used to ensure results are matched with the correct invocation, even if
-     * messages are received out-of-order.
-     */
-    id: string,
+import {createRMIMessageValidator, RMIMessage, serialiseRMIMessage} from "./RMIMessage";
+import {hasProperty, hasPropertyOfType, isArray, isObject, isString} from "../JSONValidation";
 
+type RMIRequestData = {
     /**
      * The name of the function that will be invoked on the remote RMI server.
      */
@@ -18,5 +13,17 @@ export type RMIRequest = {
     /**
      * Arguments that will be provided to the function invoked on the remote RMI server.
      */
-    args: JSON[]
+    args: any[]
 };
+
+export type RMIRequest = RMIMessage<RMIRequestData>;
+
+export const serialiseRMIRequest = (id: string, target: string, args: any[]) =>
+    serialiseRMIMessage<RMIRequestData>(id, {
+        target,
+        args
+    });
+
+export const validateRMIRequest = createRMIMessageValidator((data): data is RMIRequestData =>
+    isObject(data) && hasPropertyOfType(data, "target", isString) && hasPropertyOfType(data, "args", isArray)
+);

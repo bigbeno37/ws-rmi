@@ -1,8 +1,7 @@
 import {v4 as uuid} from "uuid";
-import {RMIResult} from "./types/RMIResult";
-import {RMIError} from "./types/RMIError";
-import {JSON} from "./types/JSON";
-import {isRMIError} from "./Utils";
+import {validateRMIRemoteResponse} from "./types/RMIRemoteResponse";
+import {hasPropertyOfType, isObject} from "./JSONValidation";
+import {serialiseRMIRequest} from "./types/RMIRequest";
 
 /**
  * Creates an RMI client that, when functions are called, will automatically message the server the given WebSocket
@@ -18,35 +17,48 @@ export const createRMIClient = <T extends object>(ws: WebSocket): T => {
         connection was not open. Ready state is ${ws.readyState}`);
 
     return new Proxy({}, {
-        get: (target, property) => {
-            return new Proxy(() => {
-            }, {
+        get: (target, property: string) => {
+            return new Proxy(() => {}, {
                 apply: (target, thisArg, args) => new Promise((resolve, reject) => {
                     const id = uuid();
 
                     const listener = ({data}: MessageEvent) => {
-                        let response: RMIResult | RMIError;
+                        if (typeof data !== "string") return;
 
+                        let response: unknown;
                         try {
                             response = JSON.parse(data);
                         } catch {
                             return;
                         }
 
-                        if (response.id !== id) return;
+                        console.log('validating response...');
+                        if (!validateRMIRemoteResponse(response)) {
+                            console.log('response was not valid');
+                            if (isObject(response) && hasPropertyOfType(response, "rmi", isObject)) {
+                                console.warn("Received an invalid RMI message! Message was\n", data);
+                            }
+
+                            return;
+                        }
+
+                        const { rmi } = response;
+
+                        if (rmi.id !== id) return;
 
                         ws.removeEventListener("message", listener);
 
-                        // Bit of a hack to make TypeScript check if response.error exists
-                        if (isRMIError(response)) {
-                            reject(response.error);
+                        if ("error" in rmi.data) {
+                            reject(rmi.data.error);
                         } else {
-                            resolve(response.result);
+                            resolve(rmi.data.result);
                         }
                     };
 
                     ws.addEventListener("message", listener);
-                    ws.send(JSON.stringify({id, target: property, args}));
+
+                    const request = serialiseRMIRequest(id, property, args);
+                    ws.send(request);
                 })
             });
         }
