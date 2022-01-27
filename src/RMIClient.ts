@@ -18,7 +18,7 @@ export const createRMIClient = <T extends object>(ws: WebSocket): T => {
 
 	return new Proxy({}, {
 		get: (target, property: string) => {
-			return new Proxy(() => {}, {
+			return new Proxy(() => { /**/ }, {
 				apply: (target, thisArg, args) => new Promise((resolve, reject) => {
 					const id = uuid();
 
