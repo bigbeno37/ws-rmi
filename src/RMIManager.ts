@@ -1,8 +1,10 @@
 import {createRMIClient} from "./RMIClient";
 import {exposeFunctions} from "./RMIRemote";
+import {Logger} from "./types/Logger";
+import {ConsoleLogger} from "./ConsoleLogger";
 
 type RMIManagerConfig = {
-	serialiser: "JSON"
+	logger: Logger
 };
 
 /**
@@ -20,21 +22,32 @@ export class RMIManager {
 	 */
 	private readonly _ws: WebSocket;
 
+	private readonly _config: RMIManagerConfig;
+
 	/**
 	 * Constructs a new manager instance.
 	 *
 	 * @param ws The WebSocket connectio nto use to perform RMI tasks. NOTE: This should be an active connection!
 	 * @param config Configuration to be applied.
 	 */
-	constructor(ws: WebSocket, config?: RMIManagerConfig) {
+	constructor(ws: WebSocket, config: RMIManagerConfig = { logger: ConsoleLogger }) {
 		this._ws = ws;
+		this._config = config;
+	}
+
+	get ws(): WebSocket {
+		return this._ws;
+	}
+
+	get config(): RMIManagerConfig {
+		return this._config;
 	}
 
 	/**
 	 * Constructs a client interface to use to invoke remote functions.
 	 */
 	getRemote<T extends object>() {
-		return createRMIClient<T>(this._ws);
+		return createRMIClient<T>(this);
 	}
 
 	/**
@@ -43,6 +56,6 @@ export class RMIManager {
 	 * @param functions An object (generally a class) that will be exposed.
 	 */
 	exposeFunctions(functions: object) {
-		exposeFunctions(this._ws, functions);
+		exposeFunctions(this, functions);
 	}
 }

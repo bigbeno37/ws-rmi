@@ -2,9 +2,7 @@ import {RMIRequest, validateRMIRequest} from "./types/RMIRequest";
 import {createRMIRemoteResult} from "./types/RMIRemoteResult";
 import {createRMIRemoteError} from "./types/RMIRemoteError";
 import {RMIRemoteResponse} from "./types/RMIRemoteResponse";
-import {pino} from "pino";
-
-const log = pino();
+import {RMIManager} from "./RMIManager";
 
 /**
  * Handles an {@link RMIRequest} and produces either an {@link RMIRemoteResult} if the specified target:
@@ -31,21 +29,9 @@ export const handleRequest = async ({ rmi }: RMIRequest, functions: { [key: stri
 	return createRMIRemoteResult(id, result);
 };
 
-type RMIRemoteOptions = {
-    /**
-     * Called with errors that are thrown during function invocation. This can be used e.g. to log errors during
-     * development or collated into log files in prod, allowing developers to determine causes of Errors without
-     * leaking sensitive information to the client.
-     *
-     * @param e The error that was thrown.
-     */
-    onFunctionInvocationError?: (e: Error) => void;
-};
-
 export const exposeFunctions = (
-	ws: WebSocket,
-	functions: object,
-	options?: RMIRemoteOptions
+	{ ws, config: { logger: log } }: RMIManager,
+	functions: object
 ) => {
 	ws.addEventListener("message", async ({ data }: MessageEvent<string>) => {
 		log.debug(`Client sent "${data}"`);
@@ -72,7 +58,6 @@ export const exposeFunctions = (
 			log.info("Client sent a valid RMI Request. Attempting to invoke function...");
 			response = await handleRequest(request, functions as { [key: string]: (...args: unknown[]) => unknown });
 		} catch (e) {
-			options?.onFunctionInvocationError?.(e as Error);
 			log.info(`There was an error during invocation of a function. Request was:\n${request}\nError was:\n${e}`);
 
 			response = createRMIRemoteError(request.rmi.id, "An unexpected error occurred during invocation.");
