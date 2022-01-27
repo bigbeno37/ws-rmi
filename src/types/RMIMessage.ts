@@ -1,4 +1,4 @@
-import {hasProperty, hasPropertyOfType, isObject, isString, Validator} from "../JSONValidation";
+import {hasPropertyOfType, isObject, isString, Validator} from "../JSONValidation";
 
 export type RMIMessage<T> = {
     rmi: {

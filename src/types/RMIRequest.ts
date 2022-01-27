@@ -2,7 +2,7 @@
  * Represents a request made to a remote RMI server.
  */
 import {createRMIMessageValidator, RMIMessage, serialiseRMIMessage} from "./RMIMessage";
-import {hasProperty, hasPropertyOfType, isArray, isObject, isString} from "../JSONValidation";
+import {hasPropertyOfType, isArray, isObject, isString} from "../JSONValidation";
 
 type RMIRequestData = {
     /**
@@ -13,12 +13,12 @@ type RMIRequestData = {
     /**
      * Arguments that will be provided to the function invoked on the remote RMI server.
      */
-    args: any[]
+    args: unknown[]
 };
 
 export type RMIRequest = RMIMessage<RMIRequestData>;
 
-export const serialiseRMIRequest = (id: string, target: string, args: any[]) =>
+export const serialiseRMIRequest = (id: string, target: string, args: unknown[]) =>
 	serialiseRMIMessage<RMIRequestData>(id, {
 		target,
 		args

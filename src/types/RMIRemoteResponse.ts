@@ -1,5 +1,5 @@
-import {createRMIMessageValidator, RMIMessage} from "./RMIMessage";
-import {hasProperty, isObject, isString} from "../JSONValidation";
+import {RMIMessage} from "./RMIMessage";
+import {isObject} from "../JSONValidation";
 import {xor} from "../Utils";
 import {RMIRemoteResultData, validateRMIRemoteResult} from "./RMIRemoteResult";
 import {RMIRemoteErrorData, validateRMIRemoteError} from "./RMIRemoteError";

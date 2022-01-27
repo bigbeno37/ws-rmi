@@ -1,6 +1,6 @@
 import {RMIRequest, validateRMIRequest} from "./types/RMIRequest";
-import {createRMIRemoteResult, RMIRemoteResult} from "./types/RMIRemoteResult";
-import {createRMIRemoteError, RMIRemoteError} from "./types/RMIRemoteError";
+import {createRMIRemoteResult} from "./types/RMIRemoteResult";
+import {createRMIRemoteError} from "./types/RMIRemoteError";
 import {WebSocketServer} from "ws";
 import {RMIRemoteResponse} from "./types/RMIRemoteResponse";
 
@@ -17,7 +17,7 @@ import {RMIRemoteResponse} from "./types/RMIRemoteResponse";
  * @param rmi The request body
  * @param functions A class / object containing functions that can be invoked.
  */
-export const handleRequest = async ({ rmi }: RMIRequest, functions: { [key: string]: Function }): Promise<RMIRemoteResponse> => {
+export const handleRequest = async ({ rmi }: RMIRequest, functions: { [key: string]: (...args: unknown[]) => unknown }): Promise<RMIRemoteResponse> => {
 	const { data, id } = rmi;
 	const { target, args } = data;
 
@@ -71,7 +71,7 @@ export const exposeFunctions = (
 			let response: RMIRemoteResponse;
 
 			try {
-				response = await handleRequest(request, functions as { [key: string]: Function });
+				response = await handleRequest(request, functions as { [key: string]: (...args: unknown[]) => unknown });
 			} catch (e) {
 				options?.onFunctionInvocationError?.(e as Error);
 				response = createRMIRemoteError(request.rmi.id, "An unexpected error occurred during invocation.");
