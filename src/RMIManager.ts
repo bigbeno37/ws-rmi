@@ -22,6 +22,11 @@ export class RMIManager {
 	 */
 	private readonly _ws: WebSocket;
 
+	/**
+	 * The configuration to apply to the RMI connections.
+	 *
+	 * @private
+	 */
 	private readonly _config: RMIManagerConfig;
 
 	/**
