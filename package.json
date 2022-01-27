@@ -6,7 +6,7 @@
   "scripts": {
     "server": "ts-node example/Server.ts | pino-pretty",
     "client": "ts-node example/Client.ts | pino-pretty",
-    "build": "tsc && typedoc --out docs src/index.ts"
+    "build": "tsc && typedoc"
   },
   "repository": {
     "type": "git",

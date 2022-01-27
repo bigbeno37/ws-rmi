@@ -3,7 +3,13 @@ import {exposeFunctions} from "./RMIRemote";
 import {Logger} from "./types/Logger";
 import {ConsoleLogger} from "./ConsoleLogger";
 
+/**
+ * Represents common configuration that should be shared between an RMI client and exposed remote RMI functions.
+ */
 type RMIManagerConfig = {
+	/**
+	 * The logger to be used by both the RMI client and exposed remote RMI functions.
+	 */
 	logger: Logger
 };
 
