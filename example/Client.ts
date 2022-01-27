@@ -1,6 +1,6 @@
 import {Server} from "./Types";
 import WsWebSocket from "ws";
-import {RMIManager} from "../src/RMIManager";
+import {RMIManager} from "../src";
 
 const ws = new WsWebSocket("ws://localhost:8080");
 

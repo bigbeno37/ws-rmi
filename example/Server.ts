@@ -1,6 +1,6 @@
 import { WebSocketServer } from "ws";
 import {Server} from "./Types";
-import {RMIManager} from "../src/RMIManager";
+import {RMIManager} from "../src";
 
 class ServerImpl implements Server {
 	async add(x: number, y: number): Promise<number> {

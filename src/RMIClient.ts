@@ -1,6 +1,5 @@
 import {v4 as uuid} from "uuid";
 import {validateRMIRemoteResponse} from "./types/RMIRemoteResponse";
-import {hasPropertyOfType, isObject} from "./JSONValidation";
 import {createRMIRequest} from "./types/RMIRequest";
 import { pino } from "pino";
 import {isEqualToAny} from "./Utils";
