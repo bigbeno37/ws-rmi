@@ -17,5 +17,5 @@ export type RMIRemoteResult = RMIMessage<RMIRemoteResultData>;
 export const createRMIRemoteResult = (id: string, result: any) => createRMIMessage(id, { result });
 
 export const validateRMIRemoteResult = createRMIMessageValidator((data): data is RMIRemoteResultData =>
-    isObject(data) && hasProperty(data, "result")
+	isObject(data) && hasProperty(data, "result")
 );

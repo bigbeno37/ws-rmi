@@ -13,54 +13,54 @@ import {serialiseRMIRequest} from "./types/RMIRequest";
  * @param ws An open WebSocket connection that will be used to invoke functions on the remote.
  */
 export const createRMIClient = <T extends object>(ws: WebSocket): T => {
-    if (ws.readyState !== 1) throw new Error(`Attempted to create remote RMI instance, but the given WebSocket 
+	if (ws.readyState !== 1) throw new Error(`Attempted to create remote RMI instance, but the given WebSocket 
         connection was not open. Ready state is ${ws.readyState}`);
 
-    return new Proxy({}, {
-        get: (target, property: string) => {
-            return new Proxy(() => {}, {
-                apply: (target, thisArg, args) => new Promise((resolve, reject) => {
-                    const id = uuid();
+	return new Proxy({}, {
+		get: (target, property: string) => {
+			return new Proxy(() => {}, {
+				apply: (target, thisArg, args) => new Promise((resolve, reject) => {
+					const id = uuid();
 
-                    const listener = ({data}: MessageEvent) => {
-                        if (typeof data !== "string") return;
+					const listener = ({data}: MessageEvent) => {
+						if (typeof data !== "string") return;
 
-                        let response: unknown;
-                        try {
-                            response = JSON.parse(data);
-                        } catch {
-                            return;
-                        }
+						let response: unknown;
+						try {
+							response = JSON.parse(data);
+						} catch {
+							return;
+						}
 
-                        console.log('validating response...');
-                        if (!validateRMIRemoteResponse(response)) {
-                            console.log('response was not valid');
-                            if (isObject(response) && hasPropertyOfType(response, "rmi", isObject)) {
-                                console.warn("Received an invalid RMI message! Message was\n", data);
-                            }
+						console.log("validating response...");
+						if (!validateRMIRemoteResponse(response)) {
+							console.log("response was not valid");
+							if (isObject(response) && hasPropertyOfType(response, "rmi", isObject)) {
+								console.warn("Received an invalid RMI message! Message was\n", data);
+							}
 
-                            return;
-                        }
+							return;
+						}
 
-                        const { rmi } = response;
+						const { rmi } = response;
 
-                        if (rmi.id !== id) return;
+						if (rmi.id !== id) return;
 
-                        ws.removeEventListener("message", listener);
+						ws.removeEventListener("message", listener);
 
-                        if ("error" in rmi.data) {
-                            reject(rmi.data.error);
-                        } else {
-                            resolve(rmi.data.result);
-                        }
-                    };
+						if ("error" in rmi.data) {
+							reject(rmi.data.error);
+						} else {
+							resolve(rmi.data.result);
+						}
+					};
 
-                    ws.addEventListener("message", listener);
+					ws.addEventListener("message", listener);
 
-                    const request = serialiseRMIRequest(id, property, args);
-                    ws.send(request);
-                })
-            });
-        }
-    }) as T;
+					const request = serialiseRMIRequest(id, property, args);
+					ws.send(request);
+				})
+			});
+		}
+	}) as T;
 };

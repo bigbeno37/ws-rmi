@@ -7,7 +7,7 @@ import type {RMIRemoteResult} from "./types/RMIRemoteResult";
  * @param response The response to verify is an RMIError
  */
 export const isRMIError = (response: { [key: string]: any }): response is RMIRemoteError => {
-    return typeof response.id === "string" && typeof response.error === "string";
-}
+	return typeof response.id === "string" && typeof response.error === "string";
+};
 
 export const xor = (condition1: boolean, condition2: boolean) => !condition1 !== !condition2;

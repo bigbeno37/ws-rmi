@@ -7,7 +7,7 @@ export const isNumber: Validator<number> = (data): data is number => typeof data
 export const isArray: Validator<unknown[]> = (data): data is unknown[] => Array.isArray(data);
 
 export const hasProperty = <T extends object, K extends string>(object: T, key: K): object is T & { [key in K]: unknown } =>
-    object.hasOwnProperty(key);
+	object.hasOwnProperty(key);
 
 export const hasPropertyOfType = <T extends object, K extends string, V>(object: T, key: K, validator: Validator<V>): object is T & { [key in K]: V } =>
-    hasProperty(object, key) && validator(object[key]);
+	hasProperty(object, key) && validator(object[key]);

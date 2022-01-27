@@ -18,15 +18,15 @@ import {RMIRemoteResponse} from "./types/RMIRemoteResponse";
  * @param functions A class / object containing functions that can be invoked.
  */
 export const handleRequest = async ({ rmi }: RMIRequest, functions: { [key: string]: Function }): Promise<RMIRemoteResponse> => {
-    const { data, id } = rmi;
-    const { target, args } = data;
+	const { data, id } = rmi;
+	const { target, args } = data;
 
-    const functionToInvoke = functions[target];
-    if (typeof functionToInvoke !== "function") return createRMIRemoteError(id, `Target "${target}" is not invokable!`);
+	const functionToInvoke = functions[target];
+	if (typeof functionToInvoke !== "function") return createRMIRemoteError(id, `Target "${target}" is not invokable!`);
 
-    const result = await functionToInvoke(...args);
+	const result = await functionToInvoke(...args);
 
-    return createRMIRemoteResult(id, result);
+	return createRMIRemoteResult(id, result);
 };
 
 type RMIRemoteOptions = {
@@ -49,35 +49,35 @@ type RMIRemoteOptions = {
  * @param options Configuration to apply to exposed functions {@see RMIRemoteOptions}.
  */
 export const exposeFunctions = (
-    wss: WebSocketServer,
-    functions: object,
-    options?: RMIRemoteOptions
+	wss: WebSocketServer,
+	functions: object,
+	options?: RMIRemoteOptions
 ) => {
-    wss.on("connection", ws => {
-        ws.on("message", async (data: string) => {
-            let request: RMIRequest;
-            try {
-                request = JSON.parse(data);
-            } catch {
-                return;
-            }
+	wss.on("connection", ws => {
+		ws.on("message", async (data: string) => {
+			let request: RMIRequest;
+			try {
+				request = JSON.parse(data);
+			} catch {
+				return;
+			}
 
-            console.log('validating request...');
-            if (!validateRMIRequest(request)) {
-                console.log('invalid!', request);
-                return;
-            }
+			console.log("validating request...");
+			if (!validateRMIRequest(request)) {
+				console.log("invalid!", request);
+				return;
+			}
 
-            let response: RMIRemoteResponse;
+			let response: RMIRemoteResponse;
 
-            try {
-                response = await handleRequest(request, functions as { [key: string]: Function });
-            } catch (e) {
-                options?.onFunctionInvocationError?.(e as Error);
-                response = createRMIRemoteError(request.rmi.id, "An unexpected error occurred during invocation.");
-            }
+			try {
+				response = await handleRequest(request, functions as { [key: string]: Function });
+			} catch (e) {
+				options?.onFunctionInvocationError?.(e as Error);
+				response = createRMIRemoteError(request.rmi.id, "An unexpected error occurred during invocation.");
+			}
 
-            ws.send(JSON.stringify(response));
-        });
-    });
+			ws.send(JSON.stringify(response));
+		});
+	});
 };

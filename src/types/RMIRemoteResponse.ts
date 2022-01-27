@@ -8,4 +8,4 @@ export type RMIRemoteResponseData = RMIRemoteResultData | RMIRemoteErrorData;
 export type RMIRemoteResponse = RMIMessage<RMIRemoteResponseData>;
 
 export const validateRMIRemoteResponse = (response: unknown): response is RMIRemoteResponse =>
-    isObject(response) && xor(validateRMIRemoteResult(response), validateRMIRemoteError(response));
+	isObject(response) && xor(validateRMIRemoteResult(response), validateRMIRemoteError(response));

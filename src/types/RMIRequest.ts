@@ -19,11 +19,11 @@ type RMIRequestData = {
 export type RMIRequest = RMIMessage<RMIRequestData>;
 
 export const serialiseRMIRequest = (id: string, target: string, args: any[]) =>
-    serialiseRMIMessage<RMIRequestData>(id, {
-        target,
-        args
-    });
+	serialiseRMIMessage<RMIRequestData>(id, {
+		target,
+		args
+	});
 
 export const validateRMIRequest = createRMIMessageValidator((data): data is RMIRequestData =>
-    isObject(data) && hasPropertyOfType(data, "target", isString) && hasPropertyOfType(data, "args", isArray)
+	isObject(data) && hasPropertyOfType(data, "target", isString) && hasPropertyOfType(data, "args", isArray)
 );

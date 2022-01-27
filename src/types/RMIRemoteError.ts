@@ -16,5 +16,5 @@ export type RMIRemoteError = RMIMessage<RMIRemoteErrorData>;
 export const createRMIRemoteError = (id: string, error: string) => createRMIMessage(id, { error });
 
 export const validateRMIRemoteError = createRMIMessageValidator((data): data is RMIRemoteErrorData =>
-    isObject(data) && hasPropertyOfType(data, "error", isString)
+	isObject(data) && hasPropertyOfType(data, "error", isString)
 );
