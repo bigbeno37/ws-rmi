@@ -1,0 +1,8 @@
+.idea/
+docs/
+example/
+node_modules/
+src/
+.eslintrc.js
+tsconfig.json
+typedoc.json

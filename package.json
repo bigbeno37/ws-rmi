@@ -1,12 +1,13 @@
 {
   "name": "ws-rmi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Remote Method Invocation implementation written in JavaScript utilising the WebSocket protocol",
   "main": "dist/index.js",
   "scripts": {
     "server": "ts-node example/Server.ts | pino-pretty",
     "client": "ts-node example/Client.ts | pino-pretty",
-    "build": "tsc && typedoc"
+    "build": "tsc && typedoc",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
