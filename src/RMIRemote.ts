@@ -62,9 +62,7 @@ export const exposeFunctions = (
 				return;
 			}
 
-			console.log("validating request...");
 			if (!validateRMIRequest(request)) {
-				console.log("invalid!", request);
 				return;
 			}
 
