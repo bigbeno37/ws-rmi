@@ -6,4 +6,4 @@
  */
 export const xor = (condition1: boolean, condition2: boolean) => !condition1 !== !condition2;
 
-export const isEqualToAny = <T>(obj: T, ...compareTo: T[]) => compareTo.some(item => obj === item);
+export const isEqualToAny = <T>(obj: unknown, ...compareTo: T[]) => compareTo.some(item => obj === item);

@@ -1,7 +1,5 @@
-import {createRMIClient} from "./RMIClient";
-import {exposeFunctions} from "./RMIRemote";
+import { RMIManager } from "./RMIManager";
 
 export {
-	createRMIClient,
-	exposeFunctions
+	RMIManager
 };

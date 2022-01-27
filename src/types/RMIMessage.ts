@@ -1,10 +1,5 @@
-import {hasPropertyOfType, isObject, isString, Validator} from "../JSONValidation";
-import {isEqualToAny} from "../Utils";
-
-export type RMIMessageType = "REQUEST" | "RESPONSE_RESULT" | "RESPONSE_ERROR";
-
-const isRMIMessageType: Validator<RMIMessageType> = (data): data is RMIMessageType =>
-	isString(data) && isEqualToAny(data, "REQUEST", "RESPONSE_RESULT", "RESPONSE_ERROR");
+import {hasPropertyOfType, isObject, isRMIMessageType, isString, Validator} from "../JSONValidation";
+import {RMIMessageType} from "./RMIMessageType";
 
 /**
  * Represents a message that is sent from client to server and vice-versa. This is the base type, and should

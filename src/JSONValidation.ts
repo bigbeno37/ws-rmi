@@ -1,3 +1,6 @@
+import {isEqualToAny} from "./Utils";
+import {RMIMessageType} from "./types/RMIMessageType";
+
 /**
  * Represents a function that narrows down the given data to a particular type. This is mainly used during JSON
  * validation.
@@ -24,6 +27,14 @@ export const isObject: Validator<object> = (data): data is object => data !== nu
  * @param data The data to narrow.
  */
 export const isString: Validator<string> = (data): data is string => typeof data === "string" || data instanceof String;
+
+/**
+ * Determines if the given string matches a valid RMIMessageType.
+ *
+ * @param data The data to narrow.
+ */
+export const isRMIMessageType: Validator<RMIMessageType> = (data): data is RMIMessageType =>
+	isString(data) && isEqualToAny<RMIMessageType>(data, "REQUEST", "RESPONSE_RESULT", "RESPONSE_ERROR");
 
 /**
  * Determines if the given data is a number.

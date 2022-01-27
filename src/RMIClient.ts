@@ -4,7 +4,7 @@ import {hasPropertyOfType, isObject} from "./JSONValidation";
 import {createRMIRequest} from "./types/RMIRequest";
 import { pino } from "pino";
 import {isEqualToAny} from "./Utils";
-import {RMIMessageType} from "./types/RMIMessage";
+import {RMIMessageType} from "./types/RMIMessageType";
 
 const log = pino();
 

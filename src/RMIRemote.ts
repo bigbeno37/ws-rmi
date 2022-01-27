@@ -1,7 +1,6 @@
 import {RMIRequest, validateRMIRequest} from "./types/RMIRequest";
 import {createRMIRemoteResult} from "./types/RMIRemoteResult";
 import {createRMIRemoteError} from "./types/RMIRemoteError";
-import {WebSocketServer} from "ws";
 import {RMIRemoteResponse} from "./types/RMIRemoteResponse";
 import {pino} from "pino";
 
