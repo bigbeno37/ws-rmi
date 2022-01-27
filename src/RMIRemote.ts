@@ -1,8 +1,7 @@
-import {RMIRequest, serialiseRMIRequest, validateRMIRequest} from "./types/RMIRequest";
+import {RMIRequest, validateRMIRequest} from "./types/RMIRequest";
 import {createRMIRemoteResult, RMIRemoteResult} from "./types/RMIRemoteResult";
 import {createRMIRemoteError, RMIRemoteError} from "./types/RMIRemoteError";
 import {WebSocketServer} from "ws";
-import {JSON} from "./types/JSON";
 import {RMIRemoteResponse} from "./types/RMIRemoteResponse";
 
 /**
