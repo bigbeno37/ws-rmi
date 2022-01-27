@@ -13,5 +13,5 @@ const wss = new WebSocketServer({ port: 8080 });
 wss.on("listening", () => {
 	console.log("Server listening on port 8080...");
 
-	exposeFunctions(wss, new ServerImpl(), { onFunctionInvocationError: console.warn });
+	exposeFunctions(wss, new ServerImpl());
 });

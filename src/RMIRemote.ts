@@ -3,6 +3,9 @@ import {createRMIRemoteResult} from "./types/RMIRemoteResult";
 import {createRMIRemoteError} from "./types/RMIRemoteError";
 import {WebSocketServer} from "ws";
 import {RMIRemoteResponse} from "./types/RMIRemoteResponse";
+import {pino} from "pino";
+
+const log = pino();
 
 /**
  * Handles an {@link RMIRequest} and produces either an {@link RMIRemoteResult} if the specified target:
@@ -54,28 +57,41 @@ export const exposeFunctions = (
 	options?: RMIRemoteOptions
 ) => {
 	wss.on("connection", ws => {
+		log.info("New client connected!");
+
 		ws.on("message", async (data: string) => {
+			log.debug(`Client sent "${data}"`);
+
 			let request: RMIRequest;
 			try {
 				request = JSON.parse(data);
-			} catch {
+			} catch (e) {
+				log.debug(`Error parsing "${data}"; Cause:\n${e}`);
 				return;
 			}
 
+			log.debug("Data is valid JSON. Validating as RMI Request...");
 			if (!validateRMIRequest(request)) {
+				log.debug(`Request was invalid! Request was\n${request}`);
 				return;
 			}
 
 			let response: RMIRemoteResponse;
 
 			try {
+				log.info("Client sent a valid RMI Request. Attempting to invoke function...");
 				response = await handleRequest(request, functions as { [key: string]: (...args: unknown[]) => unknown });
 			} catch (e) {
 				options?.onFunctionInvocationError?.(e as Error);
+				log.info(`There was an error during invocation of a function. Request was:\n${request}\nError was:\n${e}`);
+
 				response = createRMIRemoteError(request.rmi.id, "An unexpected error occurred during invocation.");
 			}
 
-			ws.send(JSON.stringify(response));
+			const responseString = JSON.stringify(response);
+
+			log.info(`Request handled; Sending the following back to client:\n${responseString}`);
+			ws.send(responseString);
 		});
 	});
 };
